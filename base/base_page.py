@@ -1,4 +1,3 @@
-from selenium.common import StaleElementReferenceException
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as ec
 from selenium.webdriver.support.ui import WebDriverWait
@@ -35,6 +34,9 @@ class BasePage:
     def is_not_present(self, find_by: str, locator: str, locator_name=None) -> WebElement:
         return self.__wait.until(ec.invisibility_of_element_located((self.__get_selenium_by(find_by), locator)), locator_name)
 
+    def is_clickable(self, find_by: str, locator: str, locator_name=None) -> WebElement:
+        return self.__wait.until(ec.element_to_be_clickable((self.__get_selenium_by(find_by), locator)), locator_name)
+
     def are_visible(self, find_by: str, locator: str, locator_name: object = None) -> List[WebElement]:
         return self.__wait.until(ec.visibility_of_all_elements_located((self.__get_selenium_by(find_by), locator)), locator_name)
 
@@ -43,6 +45,9 @@ class BasePage:
 
     def get_text_from_webelements(self, elements: List[WebElement]) -> List[str]:
        return [element.text for element in elements]
+
+    def go_to_element(self, element: WebElement) -> None:
+        self.driver.execute_script("argument[0].scrollUntoView();", element)
 
     def get_element_by_text(self, elements: List[WebElement], name: str) -> WebElement:
         name = name.lower()
