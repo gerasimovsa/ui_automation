@@ -24,8 +24,8 @@ def get_webdriver(get_chrome_options):
 @pytest.fixture(scope='function')
 def setup(request, get_webdriver):
     driver = get_webdriver
-    driver = EventFiringWebDriver(driver, ClickListener())
-    url = 'https://www.macys.com/'
+    #driver = EventFiringWebDriver(driver, ClickListener())  -   Delete cookie that detects that browser is driven by selenium
+    url = 'https://demoqa.com/text-box'
     if request.cls is not None:
         request.cls.driver = driver
     driver.get(url)
