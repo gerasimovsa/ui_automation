@@ -10,6 +10,6 @@ class TextBoxPageLocators:
 
     #created form
     CREATED_FULL_NAME = "#output #name"
-    CREATED_EMAIL = "#output #email]"
+    CREATED_EMAIL = "#output #email"
     CREATED_CURRENT_ADDRESS = "#output #currentAddress"
     CREATED_PERMANENT_ADDRESS = "#output #permanentAddress"
