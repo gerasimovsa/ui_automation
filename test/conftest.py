@@ -25,7 +25,7 @@ def get_webdriver(get_chrome_options):
 def setup(request, get_webdriver):
     driver = get_webdriver
     #driver = EventFiringWebDriver(driver, ClickListener())  -   Delete cookie that detects that browser is driven by selenium
-    url = 'https://demoqa.com/text-box'
+    url = 'https://demoqa.com/checkbox'
     if request.cls is not None:
         request.cls.driver = driver
     driver.get(url)

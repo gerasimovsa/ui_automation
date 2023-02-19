@@ -1,15 +1,22 @@
-
 class TextBoxPageLocators:
-
-    #forms
+    # forms
     FULL_NAME = "input[id='userName']"
     EMAIL = "input[id='userEmail']"
     CURRENT_ADDRESS = "textarea[id='currentAddress']"
     PERMANENT_ADDRESS = "textarea[id='permanentAddress']"
     SUBMIT = "button[id='submit']"
 
-    #created form
+    # created form
     CREATED_FULL_NAME = "#output #name"
     CREATED_EMAIL = "#output #email"
     CREATED_CURRENT_ADDRESS = "#output #currentAddress"
     CREATED_PERMANENT_ADDRESS = "#output #permanentAddress"
+
+
+class CheckBoxPageLocators:
+    EXPAND_ALL_BUTTON = "button[title='Expand all']"
+    COLLAPSE_ALL_BUTTON = "button[title='Collapse all']"
+    CHECKBOXES = "span[class = 'rct-title']"
+    CHECKED_CHECKBOXES = "svg[class='rct-icon rct-icon-check']"
+    CHECKBOX_TITLE = (".//ancestor::span[@class='rct-text']")
+    OUTPUT_RESULTS = "#result>span[class = 'text-success']"

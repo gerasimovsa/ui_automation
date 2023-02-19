@@ -26,28 +26,33 @@ class BasePage:
         return locators[find_by]
 
     def is_visible(self, find_by: str, locator: str, locator_name=None) -> WebElement:
-        return self.__wait.until(ec.visibility_of_element_located((self.__get_selenium_by(find_by), locator)), locator_name)
+        return self.__wait.until(ec.visibility_of_element_located((self.__get_selenium_by(find_by), locator)),
+                                 locator_name)
 
     def is_present(self, find_by: str, locator: str, locator_name=None) -> WebElement:
-        return self.__wait.until(ec.presence_of_element_located((self.__get_selenium_by(find_by), locator)), locator_name)
+        return self.__wait.until(ec.presence_of_element_located((self.__get_selenium_by(find_by), locator)),
+                                 locator_name)
 
     def is_not_present(self, find_by: str, locator: str, locator_name=None) -> WebElement:
-        return self.__wait.until(ec.invisibility_of_element_located((self.__get_selenium_by(find_by), locator)), locator_name)
+        return self.__wait.until(ec.invisibility_of_element_located((self.__get_selenium_by(find_by), locator)),
+                                 locator_name)
 
     def is_clickable(self, find_by: str, locator: str, locator_name=None) -> WebElement:
         return self.__wait.until(ec.element_to_be_clickable((self.__get_selenium_by(find_by), locator)), locator_name)
 
-    def are_visible(self, find_by: str, locator: str, locator_name: object = None) -> List[WebElement]:
-        return self.__wait.until(ec.visibility_of_all_elements_located((self.__get_selenium_by(find_by), locator)), locator_name)
+    def are_visible(self, find_by: str, locator: str, locator_name=None) -> List[WebElement]:
+        return self.__wait.until(ec.visibility_of_all_elements_located((self.__get_selenium_by(find_by), locator)),
+                                 locator_name)
 
     def are_present(self, find_by: str, locator: str, locator_name=None) -> List[WebElement]:
-        return self.__wait.until(ec.presence_of_all_elements_located((self.__get_selenium_by(find_by), locator)), locator_name)
+        return self.__wait.until(ec.presence_of_all_elements_located((self.__get_selenium_by(find_by), locator)),
+                                 locator_name)
 
     def get_text_from_webelements(self, elements: List[WebElement]) -> List[str]:
-       return [element.text for element in elements]
+        return [element.text for element in elements]
 
     def go_to_element(self, element: WebElement) -> None:
-        self.driver.execute_script("argument[0].scrollUntoView();", element)
+        self.driver.execute_script("arguments[0].scrollIntoView();", element)
 
     def get_element_by_text(self, elements: List[WebElement], name: str) -> WebElement:
         name = name.lower()
