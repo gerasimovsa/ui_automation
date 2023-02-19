@@ -1,9 +1,10 @@
 from base.base_page import BasePage
 from generator.generator import generated_person
-from locators.elements_page_locators import TextBoxPageLocators, CheckBoxPageLocators
+from locators.elements_page_locators import TextBoxPageLocators, CheckBoxPageLocators, RadioButtonPageLocators
 import random
 from selenium.webdriver.common.by import By
 from base.utils import Utils
+
 
 class TextBoxPage(BasePage):
     def __init__(self, driver):
@@ -60,7 +61,8 @@ class CheckBoxPage(BasePage):
     def get_checked_checkboxes_text(self) -> list[str]:
         checked_list = self.are_present('css', self.locators.CHECKED_CHECKBOXES)
         checked_checkboxes_titles = []
-        [checked_checkboxes_titles.append(checkbox.find_element(By.XPATH, self.locators.CHECKBOX_TITLE)) for checkbox in checked_list]
+        [checked_checkboxes_titles.append(checkbox.find_element(By.XPATH, self.locators.CHECKBOX_TITLE)) for checkbox in
+         checked_list]
         checked_checkboxes_text = self.get_text_from_webelements(checked_checkboxes_titles)
         return Utils.format_checkbox_strings(checked_checkboxes_text)
 
@@ -68,3 +70,30 @@ class CheckBoxPage(BasePage):
         output_list = self.are_present('css', self.locators.OUTPUT_RESULTS)
         output_list_text = self.get_text_from_webelements(output_list)
         return Utils.format_checkbox_strings(output_list_text)
+
+
+class RadioButtonPage(BasePage):
+    def __init__(self, driver):
+        super().__init__(driver)
+        self.driver = driver
+        self.locators = RadioButtonPageLocators()
+
+    def get_active_rbs_text(self) -> list[str]:
+        active_rbs = self.are_visible('css', self.locators.ACTIVE_RADIO_BUTTONS, 'Get active radio buttons text')
+        return self.get_text_from_webelements(active_rbs)
+
+    def get_output_after_rb_click(self) -> list[str]:
+        active_rbs = self.are_visible('css', self.locators.ACTIVE_RADIO_BUTTONS, 'Get active radio buttons')
+        output = []
+        for rb in active_rbs:
+            rb.click()
+            output.append(self.is_present('css', self.locators.OUTPUT_RESULT, 'Get output text').text.lower())
+        return output
+
+        """""
+        choices = {
+            'yes': self.locators.YES_RADIO,
+            'impressive': self.locators.IMPRESSIVE_RADIO,
+            'no': self.locators.NO_RADIO
+        }
+        """""

@@ -1,5 +1,7 @@
+import time
+
 import pytest
-from pom.elements_page import TextBoxPage, CheckBoxPage
+from pom.elements_page import TextBoxPage, CheckBoxPage, RadioButtonPage
 
 
 @pytest.mark.usefixtures('setup')
@@ -19,3 +21,10 @@ class TestElementsPage:
     #     print(input_checkboxes)
     #     print(output_checkboxes)
     #     assert input_checkboxes == output_checkboxes, 'Validating checked checkboxes in the hierarchy and output results'
+
+    def test_radio_button(self):
+        radio_button = RadioButtonPage(self.driver)
+        expected_output = radio_button.get_active_rbs_text()
+        actual_output = radio_button.get_output_after_rb_click()
+        assert expected_output == actual_output
+

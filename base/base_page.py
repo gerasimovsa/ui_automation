@@ -49,7 +49,7 @@ class BasePage:
                                  locator_name)
 
     def get_text_from_webelements(self, elements: List[WebElement]) -> List[str]:
-        return [element.text for element in elements]
+        return [element.text.lower() for element in elements]
 
     def go_to_element(self, element: WebElement) -> None:
         self.driver.execute_script("arguments[0].scrollIntoView();", element)
@@ -60,3 +60,4 @@ class BasePage:
 
     def delete_cookie(self, cookie_name: str) -> None:
         self.driver.delete_cookie(cookie_name)
+
