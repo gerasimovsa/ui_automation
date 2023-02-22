@@ -1,6 +1,9 @@
+import collections
+
 from base.base_page import BasePage
 from generator.generator import generated_person
-from locators.elements_page_locators import TextBoxPageLocators, CheckBoxPageLocators, RadioButtonPageLocators
+from locators.elements_page_locators import TextBoxPageLocators, CheckBoxPageLocators, RadioButtonPageLocators, \
+    WebTablePagePageLocators
 import random
 from selenium.webdriver.common.by import By
 from base.utils import Utils
@@ -23,7 +26,7 @@ class TextBoxPage(BasePage):
         self.is_visible('css', self.locators.CURRENT_ADDRESS, 'Current Address field').send_keys(current_address)
         self.is_visible('css', self.locators.PERMANENT_ADDRESS, 'Permanent Address field').send_keys(permanent_address)
         self.is_visible('css', self.locators.SUBMIT).click()
-        return [full_name, email, current_address.replace("\n", " "), permanent_address.replace("\n", " ")]
+        return Utils.remove_newline([full_name, email, current_address, permanent_address])
 
     def get_output_forms_text(self) -> list[str]:
         full_name = self.is_present('css', self.locators.CREATED_FULL_NAME, 'Get Name output text').text.split(':')[1]
@@ -87,7 +90,8 @@ class RadioButtonPage(BasePage):
         output = []
         for rb in active_rbs:
             rb.click()
-            output.append(self.is_present('css', self.locators.OUTPUT_RESULT, 'Get output text').text.lower())
+            current_output = self.is_present('css', self.locators.OUTPUT_RESULT, 'Get output text').text.lower()
+            output.append(current_output)
         return output
 
         """""
@@ -97,3 +101,40 @@ class RadioButtonPage(BasePage):
             'no': self.locators.NO_RADIO
         }
         """""
+
+
+class WebTablesPage(BasePage):
+    def __init__(self, driver):
+        super().__init__(driver)
+        self.driver = driver
+        self.locators = WebTablePagePageLocators()
+
+    def submit_registration_form(self, count: int = 5) -> list[str]:
+        person_info = next(generated_person())
+        first_name = person_info.first_name
+        last_name = person_info.last_name
+        email = person_info.email
+        age = person_info.age
+        salary = person_info.salary
+        department = person_info.department
+        while count != 0:
+            self.is_visible('css', self.locators.ADD_BUTTON, 'Click on Add button').click()
+            self.is_visible('css', self.locators.FIRSTNAME_INPUT).send_keys(first_name)
+            self.is_visible('css', self.locators.LASTNAME_INPUT).send_keys(last_name)
+            self.is_visible('css', self.locators.EMAIL_INPUT).send_keys(email)
+            self.is_visible('css', self.locators.AGE_INPUT).send_keys(age)
+            self.is_visible('css', self.locators.SALARY_INPUT).send_keys(salary)
+            self.is_visible('css', self.locators.DEPARTMENT_INPUT).send_keys(department)
+            self.is_visible('css', self.locators.SUBMIT, 'Click on Submit button').click()
+            count -= 1
+            return [first_name, last_name, str(age), email, str(salary), department]
+
+    def get_table_entries(self):
+        people_list = self.are_present('css', self.locators.TABLE_ROWS, "Getting entries from table")
+        data = []
+        for item in people_list:
+            data.append(item.text.splitlines())
+        return data
+
+    def search_entry(self, search_by: str):
+        self.is_present('css', self.locators.SEARCH_BOX, 'Entering into search box').send_keys(search_by)

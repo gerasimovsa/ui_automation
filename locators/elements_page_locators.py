@@ -28,3 +28,15 @@ class RadioButtonPageLocators:
     NO_RADIO = "div>label[for='noRadio']"
     OUTPUT_RESULT = "span[class='text-success']"
 
+
+class WebTablePagePageLocators:
+    ADD_BUTTON = "button[id='addNewRecordButton']"
+    FIRSTNAME_INPUT = "input[id='firstName']"
+    LASTNAME_INPUT = "input[id='lastName']"
+    EMAIL_INPUT = "input[id='userEmail']"
+    AGE_INPUT = "input[id='age']"
+    SALARY_INPUT = "input[id='salary']"
+    DEPARTMENT_INPUT = "input[id='department']"
+    SUBMIT = "button[id='submit']"
+    TABLE_ROWS = "div[class='rt-tr-group']"
+    SEARCH_BOX = "input[id='searchBox']"
