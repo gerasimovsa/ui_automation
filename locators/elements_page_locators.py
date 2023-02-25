@@ -45,3 +45,12 @@ class WebTablePagePageLocators:
     EDIT_BUTTON = "span[title='Edit']"
     NO_ROWS_FOUND = "div[class='rt-noData']"
     ROWS_DROPDOWN = "select[aria-label='rows per page']"
+
+
+class ButtonsPageLocators:
+    DOUBLE_CLICK_BUTTON = "button[id='doubleClickBtn']"
+    RIGHT_CLICK_BUTTON = "button[id='rightClickBtn']"
+    CLICK_ME_BUTTON = "//button[text() = 'Click Me']"
+    DOUBLE_CLICK_SUCCESS = "p[id='doubleClickMessage']"
+    RIGHT_CLICK_SUCCESS = "p[id='rightClickMessage']"
+    CLICK_ME_SUCCESS = "p[id='dynamicClickMessage']"

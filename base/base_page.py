@@ -1,3 +1,4 @@
+from selenium.webdriver import ActionChains
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as ec
 from selenium.webdriver.support.ui import WebDriverWait
@@ -59,4 +60,15 @@ class BasePage:
 
     def delete_cookie(self, cookie_name: str) -> None:
         self.driver.delete_cookie(cookie_name)
+
+    def action_doubleclick(self, element: WebElement):
+        action = ActionChains(self.driver)
+        action.double_click(element)
+        action.perform()
+
+    def action_right_click(self, element: WebElement):
+        action = ActionChains(self.driver)
+        action.context_click(element)
+        action.perform()
+
 

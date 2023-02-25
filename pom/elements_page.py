@@ -3,8 +3,7 @@ import time
 
 from base.base_page import BasePage
 from generator.generator import generated_person
-from locators.elements_page_locators import TextBoxPageLocators, CheckBoxPageLocators, RadioButtonPageLocators, \
-    WebTablePagePageLocators
+from locators.elements_page_locators import *
 import random
 from base.utils import Utils
 from selenium.webdriver.common.by import By
@@ -105,7 +104,7 @@ class RadioButtonPage(BasePage):
         """""
 
 
-class WebTablesPage(BasePage):
+class WebTablesPage(BasePage): #store CONSTANT expected results here
     def __init__(self, driver):
         super().__init__(driver)
         self.driver = driver
@@ -188,4 +187,31 @@ class WebTablesPage(BasePage):
             Select(rows_dropdown).select_by_value(str(number))
             data.append(self.get_rows_count())
         return data
+
+
+class ButtonsPage(BasePage):
+    def __init__(self, driver):
+        super().__init__(driver)
+        self.driver = driver
+        self.locators = ButtonsPageLocators()
+        self.BUTTONS = ['double', 'right', 'click']
+        self.SUCCESS_CLICK_TEXT = ['You have done a double click', 'You have done a right click', 'You have done a dynamic click']
+
+    def click_on_each_button(self, click_type: str) -> str:
+        if click_type == 'double':
+            self.action_doubleclick(self.is_visible('css', self.locators.DOUBLE_CLICK_BUTTON, 'Getting doubleclick button'))
+            success = self.is_present('css', self.locators.DOUBLE_CLICK_SUCCESS, 'Getting doubleclick success')
+            return success.text
+        if click_type == 'right':
+            self.action_right_click(self.is_visible('css', self.locators.RIGHT_CLICK_BUTTON, 'Getting right click button'))
+            success = self.is_present('css', self.locators.RIGHT_CLICK_SUCCESS, 'Getting right click success')
+            return success.text
+        if click_type == 'click':
+            self.is_visible('xpath', self.locators.CLICK_ME_BUTTON, 'Getting dynamic click button').click()
+            self.action_right_click(self.is_visible('css', self.locators.RIGHT_CLICK_BUTTON, 'Getting right click button'))
+            success = self.is_present('css', self.locators.CLICK_ME_SUCCESS, 'Getting dynamic click success')
+            return success.text
+
+
+
 
