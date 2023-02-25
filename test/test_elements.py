@@ -43,8 +43,13 @@ class TestElementsPage:
     # def test_web_table_search(self):
     #     web_table = WebTablesPage(self.driver)
     #     submitted_person = web_table.submit_registration_form()
-    #     random_data = random.randint(0, len(submitted_person))
-    #     search_string = submitted_person[random_data]
-    #     web_table.search_entry(search_string)
-    #     table_entries = web_table.get_table_entries()
-    #     assert submitted_person in table_entries, 'Validating that entering in search filed displays correct entry in the table'
+    #     search_keyword = submitted_person[random.randint(0, 5)]
+    #     web_table.fill_search_field(search_keyword)
+    #     table_row = web_table.get_raw_text_by_delete_button()
+    #     assert search_keyword in table_row, 'Validating that entering in search filed displays correct entry in the table'
+
+    def test_rows_dropdown(self):
+        web_table = WebTablesPage(self.driver)
+        expected_rows_count = [5, 10, 20]
+        rows_count = web_table.select_from_rows_dropdown()
+        assert rows_count == expected_rows_count, 'Validating that slecting from rows dropdown changes the number of displayed rows in table'

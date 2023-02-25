@@ -2,7 +2,6 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as ec
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.remote.webelement import WebElement
-from typing import List
 from selenium.common.exceptions import StaleElementReferenceException
 
 
@@ -40,21 +39,21 @@ class BasePage:
     def is_clickable(self, find_by: str, locator: str, locator_name=None) -> WebElement:
         return self.__wait.until(ec.element_to_be_clickable((self.__get_selenium_by(find_by), locator)), locator_name)
 
-    def are_visible(self, find_by: str, locator: str, locator_name=None) -> List[WebElement]:
+    def are_visible(self, find_by: str, locator: str, locator_name=None) -> list[WebElement]:
         return self.__wait.until(ec.visibility_of_all_elements_located((self.__get_selenium_by(find_by), locator)),
                                  locator_name)
 
-    def are_present(self, find_by: str, locator: str, locator_name=None) -> List[WebElement]:
+    def are_present(self, find_by: str, locator: str, locator_name=None) -> list[WebElement]:
         return self.__wait.until(ec.presence_of_all_elements_located((self.__get_selenium_by(find_by), locator)),
                                  locator_name)
 
-    def get_text_from_webelements(self, elements: List[WebElement]) -> List[str]:
+    def get_text_from_webelements(self, elements: list[WebElement]) -> list[str]:
         return [element.text.lower() for element in elements]
 
     def go_to_element(self, element: WebElement) -> None:
         self.driver.execute_script("arguments[0].scrollIntoView();", element)
 
-    def get_element_by_text(self, elements: List[WebElement], name: str) -> WebElement:
+    def get_element_by_text(self, elements: list[WebElement], name: str) -> WebElement:
         name = name.lower()
         return [element for element in elements if element.text.lower() == name][0]
 

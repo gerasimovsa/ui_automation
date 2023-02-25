@@ -1,12 +1,14 @@
 import collections
+import time
 
 from base.base_page import BasePage
 from generator.generator import generated_person
 from locators.elements_page_locators import TextBoxPageLocators, CheckBoxPageLocators, RadioButtonPageLocators, \
     WebTablePagePageLocators
 import random
-from selenium.webdriver.common.by import By
 from base.utils import Utils
+from selenium.webdriver.common.by import By
+from selenium.webdriver.support.select import Select
 
 
 class TextBoxPage(BasePage):
@@ -136,5 +138,54 @@ class WebTablesPage(BasePage):
             data.append(item.text.splitlines())
         return data
 
-    def search_entry(self, search_by: str):
-        self.is_present('css', self.locators.SEARCH_BOX, 'Entering into search box').send_keys(search_by)
+    def fill_search_field(self, keyword: str):
+        self.is_visible('css', self.locators.SEARCH_BOX, 'Entering into search box').send_keys(keyword)
+
+    def get_raw_text_by_delete_button(self):
+        delete_button = self.is_present('css', self.locators.DELETE_BUTTONS, 'Find all rows with delete buttons')
+        row = delete_button.find_element(By.XPATH, self.locators.ROW_PARENT)
+        return row.text.splitlines()
+
+    def edit_table_entry(self) -> str:
+        person_info = next(generated_person())
+        first_name = person_info.first_name
+        last_name = person_info.last_name
+        email = person_info.email
+        age = person_info.age
+        salary = person_info.salary
+        department = person_info.department
+        input_fields_list = [
+            self.locators.FIRSTNAME_INPUT,
+            self.locators.LASTNAME_INPUT,
+            self.locators.EMAIL_INPUT,
+            self.locators.AGE_INPUT,
+            self.locators.SALARY_INPUT,
+            self.locators.DEPARTMENT_INPUT]
+        person_info_list = [first_name, last_name, email, age, salary, department]
+        random_index = random.randint(0, 5)
+        self.is_visible('css', self.locators.EDIT_BUTTON, 'Clicking on Edit button').click()
+        random_field = self.is_visible('css', input_fields_list[random_index], 'Getting random field')
+        random_field.clear()
+        random_field.send_keys(person_info_list[random_index])
+        self.is_visible('css', self.locators.SUBMIT, 'Click on Submit button').click()
+        return person_info_list[random_index]
+
+    def delete_table_entry(self) -> str:
+        self.is_visible('css', self.locators.DELETE_BUTTONS, 'Clicking on Delete button').click()
+        return self.is_present('css', self.locators.NO_ROWS_FOUND, 'No rows found message').text
+
+    def get_rows_count(self) -> int:
+        table_rows = self.are_present('css', self.locators.TABLE_ROWS, 'Getting table rows')
+        return len(table_rows)
+
+    def select_from_rows_dropdown(self) -> list[int]:
+        rows_numbers = [5, 10, 20]
+        data = []
+        for number in rows_numbers:
+            rows_dropdown = self.is_visible('css', self.locators.ROWS_DROPDOWN, 'Getting rows dropdown')
+            self.go_to_element(rows_dropdown)
+            rows_dropdown.click()
+            Select(rows_dropdown).select_by_value(str(number))
+            data.append(self.get_rows_count())
+        return data
+

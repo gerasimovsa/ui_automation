@@ -17,7 +17,7 @@ class CheckBoxPageLocators:
     COLLAPSE_ALL_BUTTON = "button[title='Collapse all']"
     CHECKBOXES = "span[class = 'rct-title']"
     CHECKED_CHECKBOXES = "svg[class='rct-icon rct-icon-check']"
-    CHECKBOX_TITLE = (".//ancestor::span[@class='rct-text']")
+    CHECKBOX_TITLE = ".//ancestor::span[@class='rct-text']"
     OUTPUT_RESULTS = "#result>span[class='text-success']"
 
 
@@ -40,3 +40,8 @@ class WebTablePagePageLocators:
     SUBMIT = "button[id='submit']"
     TABLE_ROWS = "div[class='rt-tr-group']"
     SEARCH_BOX = "input[id='searchBox']"
+    DELETE_BUTTONS = "span[title='Delete']"
+    ROW_PARENT = ".//ancestor::div[@class='rt-tr-group']"
+    EDIT_BUTTON = "span[title='Edit']"
+    NO_ROWS_FOUND = "div[class='rt-noData']"
+    ROWS_DROPDOWN = "select[aria-label='rows per page']"
