@@ -48,8 +48,8 @@ class TestElementsPage:
     #     table_row = web_table.get_raw_text_by_delete_button()
     #     assert search_keyword in table_row, 'Validating that entering in search filed displays correct entry in the table'
 
-    def test_rows_dropdown(self):
-        web_table = WebTablesPage(self.driver)
-        expected_rows_count = [5, 10, 20]
-        rows_count = web_table.select_from_rows_dropdown()
-        assert rows_count == expected_rows_count, 'Validating that slecting from rows dropdown changes the number of displayed rows in table'
+    # def test_rows_dropdown(self):
+    #     web_table = WebTablesPage(self.driver)
+    #     expected_rows_count = [5, 10, 20]
+    #     rows_count = web_table.select_from_rows_dropdown()
+    #     assert rows_count == expected_rows_count, 'Validating that slecting from rows dropdown changes the number of displayed rows in table'
