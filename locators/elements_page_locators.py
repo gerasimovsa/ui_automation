@@ -54,3 +54,18 @@ class ButtonsPageLocators:
     DOUBLE_CLICK_SUCCESS = "p[id='doubleClickMessage']"
     RIGHT_CLICK_SUCCESS = "p[id='rightClickMessage']"
     CLICK_ME_SUCCESS = "p[id='dynamicClickMessage']"
+
+
+class LinksPageLocators:
+    ALL_LINKS = '#linkWrapper > p > a'
+    HOME_LINK = "a[id='simpleLink']"
+    CREATED = "a[id='created']"
+    NO_CONTENT = "a[id='no-content']"
+    MOVED = "a[id='moved']"
+    BAD_REQUEST = "a[id='bad-request']"
+    UNAUTHORIZED = "a[id='unauthorized']"
+    FORBIDDEN = "a[id='forbidden']"
+    NOT_FOUND = "a[id='invalid-url']"
+    LINK_RESPONSE = "[id='linkResponse']"
+    API_CALL_LINKS = [CREATED, NO_CONTENT, MOVED, BAD_REQUEST, UNAUTHORIZED, FORBIDDEN, NOT_FOUND]
+

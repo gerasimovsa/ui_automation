@@ -9,7 +9,7 @@ from selenium.common.exceptions import StaleElementReferenceException
 class BasePage:
     def __init__(self, driver):
         self.driver = driver
-        self.__wait = WebDriverWait(driver, 15, 0.3, ignored_exceptions=StaleElementReferenceException)
+        self.__wait = WebDriverWait(driver, 15, 0.3, ignored_exceptions= StaleElementReferenceException)
 
     def __get_selenium_by(self, find_by: str) -> str:
         find_by = find_by.lower()
@@ -61,14 +61,16 @@ class BasePage:
     def delete_cookie(self, cookie_name: str) -> None:
         self.driver.delete_cookie(cookie_name)
 
-    def action_doubleclick(self, element: WebElement):
+    def action_doubleclick(self, element: WebElement) -> None:
         action = ActionChains(self.driver)
         action.double_click(element)
         action.perform()
 
-    def action_right_click(self, element: WebElement):
+    def action_right_click(self, element: WebElement) -> None:
         action = ActionChains(self.driver)
         action.context_click(element)
         action.perform()
 
+    def switch_tab_by_handle(self, handle: int) -> None:
+        self.driver.switch_to.window(self.driver.window_handles[handle])
 

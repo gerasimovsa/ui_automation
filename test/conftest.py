@@ -18,7 +18,7 @@ def get_chrome_options():
 @pytest.fixture
 def get_webdriver(get_chrome_options):
     options = get_chrome_options
-    driver = webdriver.Chrome(options=options)  # executable_pass = r'C:\Webdrivers\chromedriver.exe'
+    driver = webdriver.Chrome(options=options)  # executable_pass = r'C:\\Webdrivers\\chromedriver.exe'
     return driver
 
 
@@ -26,7 +26,7 @@ def get_webdriver(get_chrome_options):
 def setup(request, get_webdriver):
     driver = get_webdriver
     #driver = EventFiringWebDriver(driver, ClickListener())  -   Delete cookie that detects that browser is driven by selenium
-    url = 'https://demoqa.com/buttons'
+    url = 'https://demoqa.com/links'
     if request.cls is not None:
         request.cls.driver = driver
     driver.get(url)

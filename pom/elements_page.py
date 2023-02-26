@@ -1,6 +1,6 @@
-import collections
 import time
-
+import requests as r
+import re
 from base.base_page import BasePage
 from generator.generator import generated_person
 from locators.elements_page_locators import *
@@ -104,7 +104,7 @@ class RadioButtonPage(BasePage):
         """""
 
 
-class WebTablesPage(BasePage): #store CONSTANT expected results here
+class WebTablesPage(BasePage):  # store CONSTANT expected results here
     def __init__(self, driver):
         super().__init__(driver)
         self.driver = driver
@@ -195,23 +195,82 @@ class ButtonsPage(BasePage):
         self.driver = driver
         self.locators = ButtonsPageLocators()
         self.BUTTONS = ['double', 'right', 'click']
-        self.SUCCESS_CLICK_TEXT = ['You have done a double click', 'You have done a right click', 'You have done a dynamic click']
+        self.SUCCESS_CLICK_TEXT = ['You have done a double click', 'You have done a right click',
+                                   'You have done a dynamic click']
 
     def click_on_each_button(self, click_type: str) -> str:
         if click_type == 'double':
-            self.action_doubleclick(self.is_visible('css', self.locators.DOUBLE_CLICK_BUTTON, 'Getting doubleclick button'))
+            self.action_doubleclick(
+                self.is_visible('css', self.locators.DOUBLE_CLICK_BUTTON, 'Getting doubleclick button'))
             success = self.is_present('css', self.locators.DOUBLE_CLICK_SUCCESS, 'Getting doubleclick success')
             return success.text
         if click_type == 'right':
-            self.action_right_click(self.is_visible('css', self.locators.RIGHT_CLICK_BUTTON, 'Getting right click button'))
+            self.action_right_click(
+                self.is_visible('css', self.locators.RIGHT_CLICK_BUTTON, 'Getting right click button'))
             success = self.is_present('css', self.locators.RIGHT_CLICK_SUCCESS, 'Getting right click success')
             return success.text
         if click_type == 'click':
             self.is_visible('xpath', self.locators.CLICK_ME_BUTTON, 'Getting dynamic click button').click()
-            self.action_right_click(self.is_visible('css', self.locators.RIGHT_CLICK_BUTTON, 'Getting right click button'))
+            self.action_right_click(
+                self.is_visible('css', self.locators.RIGHT_CLICK_BUTTON, 'Getting right click button'))
             success = self.is_present('css', self.locators.CLICK_ME_SUCCESS, 'Getting dynamic click success')
             return success.text
 
 
+class LinksPage(BasePage):
+    def __init__(self, driver):
+        super().__init__(driver)
+        self.driver = driver
+        self.locators = LinksPageLocators()
+        self.API_CALL_URLS = [
+            'created',
+            'no-content',
+            'moved',
+            'bad-request',
+            'unauthorized',
+            'forbidden',
+            'invalid-url'
+        ]
 
+    def check_home_link(self) -> str:
+        home_link = self.is_visible('css', self.locators.HOME_LINK, 'Getting home link')
+        home_link_href = home_link.get_attribute("href")
+        response = r.get('home_link_href')
+        if response.status_code == 200:
+            home_link.click()
+            self.switch_tab_by_handle(1)
+            current_url = self.driver.current_url
+            return home_link_href, current_url
+        else:
+            return f'Invalid status code. Response status code: {response.status_code}. Link href: {home_link_href}'
+
+    def check_api_call_links(self) -> list[str]:
+        api_call_locators = self.locators.API_CALL_LINKS
+        api_call_links = [self.is_visible('css', link_locator) for link_locator in api_call_locators]
+        status_codes = []
+        messages = []
+        for api_call_link in api_call_links:
+            api_call_link.click()
+            time.sleep(1)
+            response_text = self.is_present('css', self.locators.LINK_RESPONSE, 'Getting response text').text
+            response_statuscode = re.search(r'\d+', response_text).group()
+            message = response_text[50:].replace(' Permanently', '').lower()
+
+            status_codes.append(response_statuscode)
+            messages.append(message)
+        return status_codes, messages
+
+    def send_calls_get_status_code(self) -> list[str]:
+        api_call_urls = [f'https://demoqa.com/{link}' for link in self.API_CALL_URLS]
+        response_codes = []
+        for url in api_call_urls:
+            response = r.get(url)
+            response_codes.append(str(response.status_code))
+        return response_codes
+
+    def get_api_call_links_text(self) -> list[str]:
+        api_call_locators = self.locators.API_CALL_LINKS
+        api_call_links = [self.is_visible('css', link_locator) for link_locator in api_call_locators]
+        api_call_links_text = self.get_text_from_webelements(api_call_links)
+        return api_call_links_text
 

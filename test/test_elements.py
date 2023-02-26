@@ -1,6 +1,7 @@
 import time
-
 import pytest
+import requests as r
+
 from pom.elements_page import *
 
 
@@ -53,10 +54,29 @@ class TestElementsPage:
     #     rows_count = web_table.select_from_rows_dropdown()
     #     assert rows_count == expected_rows_count, 'Validating that selecting from rows dropdown changes the number of displayed rows in table'
 
-    def test_click_buttons(self):
-        buttons_page = ButtonsPage(self.driver)
-        buttons = buttons_page.BUTTONS
-        success_click_text = buttons_page.SUCCESS_CLICK_TEXT
-        for button in buttons:
-            success = buttons_page.click_on_each_button(button)
-            assert success in success_click_text, 'Validating if success text is present in expected success text list'
+    # def test_click_buttons(self):
+    #     buttons_page = ButtonsPage(self.driver)
+    #     buttons = buttons_page.BUTTONS
+    #     success_click_text = buttons_page.SUCCESS_CLICK_TEXT
+    #     for button in buttons:
+    #         success = buttons_page.click_on_each_button(button)
+    #         assert success in success_click_text, 'Validating if success text is present in expected success text list'
+
+    # def test_home_link(self):
+    #     links_page = LinksPage(self.driver)
+    #     home_link_href, current_url = links_page.check_home_link()
+    #     print(home_link_href, current_url)
+    #     assert current_url == home_link_href, 'Validating that url of new tab matches href url'
+
+    def test_api_calls(self):
+        links_page = LinksPage(self.driver)
+        expected_status_message = links_page.get_api_call_links_text()
+        response_code, response_message = links_page.check_api_call_links()
+        expected_status_code = links_page.send_calls_get_status_code()
+        print(expected_status_code)
+        print(expected_status_message)
+        print(response_code)
+        print(response_message)
+        assert response_code == expected_status_code
+        assert response_message == expected_status_message
+
