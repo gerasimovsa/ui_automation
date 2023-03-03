@@ -1,3 +1,6 @@
+import base64
+
+
 class Utils:
 
     @staticmethod

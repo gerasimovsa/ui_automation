@@ -69,3 +69,8 @@ class LinksPageLocators:
     LINK_RESPONSE = "[id='linkResponse']"
     API_CALL_LINKS = [CREATED, NO_CONTENT, MOVED, BAD_REQUEST, UNAUTHORIZED, FORBIDDEN, NOT_FOUND]
 
+
+class UploadDownloadPageLocators:
+    DOWNLOAD_BUTTON = "a[id='downloadButton']"
+    UPLOAD_BUTTON = "input[id='uploadFile']"
+    UPLOADED_FILE = "p[id='uploadedFilePath']"

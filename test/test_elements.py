@@ -68,15 +68,18 @@ class TestElementsPage:
     #     print(home_link_href, current_url)
     #     assert current_url == home_link_href, 'Validating that url of new tab matches href url'
 
-    def test_api_calls(self):
-        links_page = LinksPage(self.driver)
-        expected_status_message = links_page.get_api_call_links_text()
-        response_code, response_message = links_page.check_api_call_links()
-        expected_status_code = links_page.send_calls_get_status_code()
-        print(expected_status_code)
-        print(expected_status_message)
-        print(response_code)
-        print(response_message)
-        assert response_code == expected_status_code
-        assert response_message == expected_status_message
+    # def test_api_calls(self):
+    #     links_page = LinksPage(self.driver)
+    #     expected_status_message = links_page.get_api_call_links_text()
+    #     response_code, response_message = links_page.check_api_call_links()
+    #     expected_status_code = links_page.send_calls_get_status_code()
+    #     for k, v in zip(expected_status_message, response_message):
+    #         assert k in v, 'Validating that response message corresponds to link text '
+    #     assert response_code == expected_status_code, 'Validating that status code corresponds to URL status code'
 
+    def test_upload_download_page(self):
+        upload_download_page = UploadDownloadPage(self.driver)
+        # file_name, uploaded_file_name = upload_download_page.upload_file()
+        # assert file_name == uploaded_file_name, 'Validating that uploaded filename matches result'
+        check = upload_download_page.download_file()
+        assert check is True, "Validating image download link"

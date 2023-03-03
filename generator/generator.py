@@ -18,3 +18,19 @@ def generated_person():
         salary=random.randint(5000, 20000),
         department=faker_en.job()
     )
+
+
+def generate_text_file() -> str:
+    dummy_data = faker_en.word()
+    dummy_filename = faker_en.file_name(category='text', extension='txt')
+    path = rf'C:\Users\Sergey_Gerasimov\PycharmProjects\ui_automation\{random.randint(0, 999)}_{dummy_filename}'
+    file = open(path, 'w+')
+    file.write(dummy_data)
+    file.close()
+    return path
+
+
+def generate_path(cat: str, extension: str) -> str:
+    dummy_filename = faker_en.file_name(category=cat, extension=extension)
+    path = rf'C:\Users\Sergey_Gerasimov\PycharmProjects\ui_automation\{random.randint(0, 999)}_{dummy_filename}'
+    return path

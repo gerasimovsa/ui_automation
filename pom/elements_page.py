@@ -1,8 +1,10 @@
+import base64
+import os
 import time
 import requests as r
 import re
 from base.base_page import BasePage
-from generator.generator import generated_person
+from generator.generator import *
 from locators.elements_page_locators import *
 import random
 from base.utils import Utils
@@ -254,7 +256,7 @@ class LinksPage(BasePage):
             time.sleep(1)
             response_text = self.is_present('css', self.locators.LINK_RESPONSE, 'Getting response text').text
             response_statuscode = re.search(r'\d+', response_text).group()
-            message = response_text[50:].replace(' Permanently', '').lower()
+            message = response_text[50:].lower()
 
             status_codes.append(response_statuscode)
             messages.append(message)
@@ -274,3 +276,30 @@ class LinksPage(BasePage):
         api_call_links_text = self.get_text_from_webelements(api_call_links)
         return api_call_links_text
 
+
+class UploadDownloadPage(BasePage):
+    def __init__(self, driver):
+        super().__init__(driver)
+        self.driver = driver
+        self.locators = UploadDownloadPageLocators()
+
+    def upload_file(self):
+        path = generate_text_file()
+        upload_button = self.is_present('css', self.locators.UPLOAD_BUTTON, "Getting upload button")
+        upload_button.send_keys(path)
+        uploaded_file_path = self.is_present('css', self.locators.UPLOADED_FILE, "Getting uploaded file path").text
+        file_name, uploaded_file_name = os.path.basename(path), os.path.basename(uploaded_file_path)
+        os.remove(path)
+        return file_name, uploaded_file_name
+
+    def download_file(self):
+        path = generate_path('img', 'jpeg')
+        image_link = self.is_visible('css', self.locators.DOWNLOAD_BUTTON).get_attribute('href')
+        link_b = base64.b64decode(image_link)
+        with open(path, 'wb+') as f:
+            offset = link_b.find(b'\xff\xd8')
+            f.write(link_b[offset:])
+            check_file = os.path.exists(path)
+            f.close()
+        os.remove(path)
+        return check_file
