@@ -3,13 +3,17 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as ec
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.remote.webelement import WebElement
-from selenium.common.exceptions import StaleElementReferenceException
+from selenium.common.exceptions import StaleElementReferenceException, TimeoutException
 
 
 class BasePage:
-    def __init__(self, driver):
+    def __init__(self, driver, url='https://demoqa.com/'):
         self.driver = driver
-        self.__wait = WebDriverWait(driver, 15, 0.3, ignored_exceptions= StaleElementReferenceException)
+        self.url = url
+        self.__wait = WebDriverWait(driver, 15, 0.3, ignored_exceptions=StaleElementReferenceException)
+
+    def open_page(self):
+        self.driver.get(self.url)
 
     def __get_selenium_by(self, find_by: str) -> str:
         find_by = find_by.lower()
@@ -74,3 +78,29 @@ class BasePage:
     def switch_tab_by_handle(self, handle: int) -> None:
         self.driver.switch_to.window(self.driver.window_handles[handle])
 
+    def check_state_after_time(self, find_by: str, locator: str, condition: str, timeout: int = 10) -> bool:
+        wait = WebDriverWait(self.driver, timeout)
+        if condition == 'visible':
+            try:
+                wait.until(ec.visibility_of_element_located((self.__get_selenium_by(find_by), locator)))
+                return True
+            except TimeoutException as error:
+                print(f'{error}\n Approximate elapsed time until element is visible is greater then {timeout} seconds')
+                return False
+        elif condition == 'present':
+            try:
+                wait.until(ec.visibility_of_element_located((self.__get_selenium_by(find_by), locator)))
+                return True
+            except TimeoutException as error:
+                print(f'{error}\n Approximate elapsed time until element is present is greater then {timeout} seconds')
+                return False
+        elif condition == 'clickable':
+            try:
+                wait.until(ec.visibility_of_element_located((self.__get_selenium_by(find_by), locator)))
+                return True
+            except TimeoutException as error:
+                print(
+                    f'{error}\n Approximate elapsed time until element is clickable is greater then {timeout} seconds')
+                return False
+        else:
+            return False

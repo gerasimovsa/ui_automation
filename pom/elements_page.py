@@ -6,10 +6,12 @@ import re
 from base.base_page import BasePage
 from generator.generator import *
 from locators.elements_page_locators import *
+from locators.demoqa_urls import *
 import random
 from base.utils import Utils
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.select import Select
+from selenium.common.exceptions import TimeoutException
 
 
 class TextBoxPage(BasePage):
@@ -283,7 +285,7 @@ class UploadDownloadPage(BasePage):
         self.driver = driver
         self.locators = UploadDownloadPageLocators()
 
-    def upload_file(self):
+    def upload_file(self) -> str:
         path = generate_text_file()
         upload_button = self.is_present('css', self.locators.UPLOAD_BUTTON, "Getting upload button")
         upload_button.send_keys(path)
@@ -292,7 +294,7 @@ class UploadDownloadPage(BasePage):
         os.remove(path)
         return file_name, uploaded_file_name
 
-    def download_file(self):
+    def download_file(self) -> bool:
         path = generate_path('img', 'jpeg')
         image_link = self.is_visible('css', self.locators.DOWNLOAD_BUTTON).get_attribute('href')
         link_b = base64.b64decode(image_link)
@@ -303,3 +305,24 @@ class UploadDownloadPage(BasePage):
             f.close()
         os.remove(path)
         return check_file
+
+
+class DynamicPropsPage(BasePage):
+    def __init__(self, driver):
+        super().__init__(driver)
+        self.driver = driver
+        self.url = ElementsPageUrls.DYNAMIC_PROPERTIES
+        self.locators = DynamicPropsPageLocators()
+        self.RED_COLOR = 'rgba(220, 53, 69, 1)'
+
+    def check_color_change_after(self) -> str:
+        self.is_present('css', self.locators.DETECT_COLOR_CHANGE, 'Checking that class of button changed')
+        color_button = self.is_present('css', self.locators.COLOR_CHANGE_BUTTON, 'Getting color change button')
+        rgba_color = color_button.value_of_css_property('color')
+        return rgba_color
+
+    def check_button_is_visible_after(self, time_to_wait: int) -> bool:
+        return self.check_state_after_time('css', self.locators.VISIBLE_AFTER, 'visible', time_to_wait)
+
+    def check_button_is_clickable_after(self, time_to_wait: int) -> bool:
+        return self.check_state_after_time('css', self.locators.VISIBLE_AFTER, 'clickable', time_to_wait)

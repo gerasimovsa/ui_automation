@@ -74,3 +74,10 @@ class UploadDownloadPageLocators:
     DOWNLOAD_BUTTON = "a[id='downloadButton']"
     UPLOAD_BUTTON = "input[id='uploadFile']"
     UPLOADED_FILE = "p[id='uploadedFilePath']"
+
+
+class DynamicPropsPageLocators:
+    ENABLED_AFTER = "button[id='enableAfter']"
+    VISIBLE_AFTER = "button[id='visibleAfter']"
+    COLOR_CHANGE_BUTTON = "button[id='colorChange']"
+    DETECT_COLOR_CHANGE = "button[class*='text-danger']"

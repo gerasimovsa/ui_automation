@@ -1,9 +1,8 @@
 import time
 import pytest
 import requests as r
-
 from pom.elements_page import *
-
+import locators.demoqa_urls as urls
 
 @pytest.mark.usefixtures('setup')  # split up in classes later
 class TestElementsPage:
@@ -77,9 +76,30 @@ class TestElementsPage:
     #         assert k in v, 'Validating that response message corresponds to link text '
     #     assert response_code == expected_status_code, 'Validating that status code corresponds to URL status code'
 
-    def test_upload_download_page(self):
-        upload_download_page = UploadDownloadPage(self.driver)
-        # file_name, uploaded_file_name = upload_download_page.upload_file()
-        # assert file_name == uploaded_file_name, 'Validating that uploaded filename matches result'
-        check = upload_download_page.download_file()
-        assert check is True, "Validating image download link"
+    # def test_upload_download_page(self):
+    #     upload_download_page = UploadDownloadPage(self.driver)
+    #     # file_name, uploaded_file_name = upload_download_page.upload_file()
+    #     # assert file_name == uploaded_file_name, 'Validating that uploaded filename matches result'
+    #     check = upload_download_page.download_file()
+    #     assert check is True, "Validating image download link"
+
+    # def test_button_color_change(self):
+    #     dynamic_props_page = DynamicPropsPage(self.driver)
+    #     expected_color = dynamic_props_page.RED_COLOR
+    #     start_time = time.time()
+    #     button_color = dynamic_props_page.check_color_change()
+    #     delta = time.time() - start_time
+    #     print(f'Approximate elapsed time until color changed: {delta}')
+    #     assert delta <= 5, f'Approximate elapsed time until color changed is greater then 5 seconds. Actual: {delta}'
+    #     assert button_color == expected_color, 'Validating that color of button changed'
+
+    def test_dynamic_states(self):
+        dynamic_props_page = DynamicPropsPage(self.driver)
+        timeout = 3
+        dynamic_props_page.open_page()
+        is_visible = dynamic_props_page.check_button_is_visible_after(timeout)
+        assert is_visible is True
+        is_clickable = dynamic_props_page.check_button_is_clickable_after(timeout)
+        assert is_clickable is True
+
+
