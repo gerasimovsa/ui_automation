@@ -1,4 +1,7 @@
 /.pytest_cache/
+.pytest_cache/
+__pycache__/
+**/__pycache__/
+.mypy_cache/
 /.idea/
 /venv/
-**/__pycache__/
