@@ -16,13 +16,14 @@ def generated_person():
         last_name=faker_en.last_name(),
         age=random.randint(18, 100),
         salary=random.randint(5000, 20000),
-        department=faker_en.job()
+        department=faker_en.job(),
+        phone_number=faker_en.msisdn()
     )
 
 
-def generate_text_file() -> str:
+def generate_file(cat: str, extension: str) -> str:
     dummy_data = faker_en.word()
-    dummy_filename = faker_en.file_name(category='text', extension='txt')
+    dummy_filename = faker_en.file_name(category=cat, extension=extension)
     path = rf'C:\Users\Sergey_Gerasimov\PycharmProjects\ui_automation\{random.randint(0, 999)}_{dummy_filename}'
     file = open(path, 'w+')
     file.write(dummy_data)
@@ -34,3 +35,23 @@ def generate_path(cat: str, extension: str) -> str:
     dummy_filename = faker_en.file_name(category=cat, extension=extension)
     path = rf'C:\Users\Sergey_Gerasimov\PycharmProjects\ui_automation\{random.randint(0, 999)}_{dummy_filename}'
     return path
+
+
+def generate_autocomplete_subject() -> str:
+    subjects_list = [
+        "Hindi",
+        "English",
+        "Maths",
+        "Physics",
+        "Chemistry",
+        "Biology",
+        "Computer Science",
+        "Commerce",
+        "Accounting",
+        "Economics",
+        "Arts",
+        "Social Studies",
+        "History",
+        "Civics"
+    ]
+    return subjects_list[random.randint(0, len(subjects_list) - 1)]

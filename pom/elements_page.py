@@ -11,13 +11,13 @@ import random
 from base.utils import Utils
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.select import Select
-from selenium.common.exceptions import TimeoutException
 
 
 class TextBoxPage(BasePage):
     def __init__(self, driver):
         super().__init__(driver)
         self.driver = driver
+        self.url = ElementsPageUrls.TEXT_BOX
         self.locators = TextBoxPageLocators()
 
     def fill_all_fields(self) -> [str]:
@@ -42,13 +42,14 @@ class TextBoxPage(BasePage):
         permanent_address = \
             self.is_present('css', self.locators.CREATED_PERMANENT_ADDRESS, 'Get Permanent Address text').text.split(
                 ':')[1]
-        return [full_name, email, current_address, permanent_address]
+        return [full_name.lower(), email.lower(), current_address.lower(), permanent_address.lower()]
 
 
 class CheckBoxPage(BasePage):
     def __init__(self, driver):
         super().__init__(driver)
         self.driver = driver
+        self.url = ElementsPageUrls.CHECK_BOX
         self.locators = CheckBoxPageLocators()
 
     def expand_checkbox_list(self) -> None:
@@ -84,6 +85,7 @@ class RadioButtonPage(BasePage):
     def __init__(self, driver):
         super().__init__(driver)
         self.driver = driver
+        self.url = ElementsPageUrls.RADIO_BUTTON
         self.locators = RadioButtonPageLocators()
 
     def get_active_rbs_text(self) -> list[str]:
@@ -112,6 +114,7 @@ class WebTablesPage(BasePage):  # store CONSTANT expected results here
     def __init__(self, driver):
         super().__init__(driver)
         self.driver = driver
+        self.url = ElementsPageUrls.WEB_TABLES
         self.locators = WebTablePagePageLocators()
 
     def submit_registration_form(self, count: int = 5) -> list[str]:
@@ -197,6 +200,7 @@ class ButtonsPage(BasePage):
     def __init__(self, driver):
         super().__init__(driver)
         self.driver = driver
+        self.url = ElementsPageUrls.BUTTONS
         self.locators = ButtonsPageLocators()
         self.BUTTONS = ['double', 'right', 'click']
         self.SUCCESS_CLICK_TEXT = ['You have done a double click', 'You have done a right click',
@@ -225,6 +229,7 @@ class LinksPage(BasePage):
     def __init__(self, driver):
         super().__init__(driver)
         self.driver = driver
+        self.url = ElementsPageUrls.LINKS
         self.locators = LinksPageLocators()
         self.API_CALL_URLS = [
             'created',
@@ -239,7 +244,7 @@ class LinksPage(BasePage):
     def check_home_link(self) -> str:
         home_link = self.is_visible('css', self.locators.HOME_LINK, 'Getting home link')
         home_link_href = home_link.get_attribute("href")
-        response = r.get('home_link_href')
+        response = r.get(home_link_href)
         if response.status_code == 200:
             home_link.click()
             self.switch_tab_by_handle(1)
@@ -283,10 +288,11 @@ class UploadDownloadPage(BasePage):
     def __init__(self, driver):
         super().__init__(driver)
         self.driver = driver
+        self.url = ElementsPageUrls.UPLOAD_AND_DOWNLOAD
         self.locators = UploadDownloadPageLocators()
 
     def upload_file(self) -> str:
-        path = generate_text_file()
+        path = generate_file('text', 'txt')
         upload_button = self.is_present('css', self.locators.UPLOAD_BUTTON, "Getting upload button")
         upload_button.send_keys(path)
         uploaded_file_path = self.is_present('css', self.locators.UPLOADED_FILE, "Getting uploaded file path").text
@@ -321,8 +327,8 @@ class DynamicPropsPage(BasePage):
         rgba_color = color_button.value_of_css_property('color')
         return rgba_color
 
-    def check_button_is_visible_after(self, time_to_wait: int) -> bool:
+    def check_button_is_visible_after(self, time_to_wait: float) -> bool:
         return self.check_state_after_time('css', self.locators.VISIBLE_AFTER, 'visible', time_to_wait)
 
-    def check_button_is_clickable_after(self, time_to_wait: int) -> bool:
+    def check_button_is_clickable_after(self, time_to_wait: float) -> bool:
         return self.check_state_after_time('css', self.locators.VISIBLE_AFTER, 'clickable', time_to_wait)

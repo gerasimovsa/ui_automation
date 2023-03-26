@@ -1,4 +1,6 @@
 import base64
+import datetime
+from dateutil.relativedelta import relativedelta
 
 
 class Utils:
@@ -14,5 +16,12 @@ class Utils:
     @staticmethod
     def remove_newline(str_list: list[str]) -> list[str]:
         return [str.replace("\n", " ").lower() for str in str_list]
+
+    @staticmethod
+    def years_delta_from_now(start_date: str) -> str:
+        date1 = datetime.datetime.strptime(start_date, '%d %b %Y')
+        today = datetime.datetime.now()
+        delta = str(relativedelta(today, date1).years)
+        return delta
 
 

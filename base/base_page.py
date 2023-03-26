@@ -78,7 +78,11 @@ class BasePage:
     def switch_tab_by_handle(self, handle: int) -> None:
         self.driver.switch_to.window(self.driver.window_handles[handle])
 
-    def check_state_after_time(self, find_by: str, locator: str, condition: str, timeout: int = 10) -> bool:
+    def remove_footer(self):
+        self.driver.execute_script("document.getElementsByTagName('footer')[0].remove();")
+        self.driver.execute_script("document.getElementById('fixedban').remove();")
+
+    def check_state_after_time(self, find_by: str, locator: str, condition: str, timeout: float = 10.0) -> bool:
         wait = WebDriverWait(self.driver, timeout)
         if condition == 'visible':
             try:
