@@ -8,4 +8,6 @@ class AlertsPageLocators:
     ALERT_BUTTON = "button[id='alertButton']"
     TIMER_ALERT_BUTTON = "button[id='timerAlertButton']"
     CONFIRM_BUTTON = "button[id='confirmButton']"
+    CONFIRM_RESULT = "span[id='confirmResult']"
     PROMPT_BUTTON = "button[id='promtButton']"
+    PROMPT_RESULT = "span[id='promptResult']"
