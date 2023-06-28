@@ -11,3 +11,8 @@ class ElementsPageUrls:
 
 class FormsPageUrls:
     PRACTICE_FORM = 'https://demoqa.com/automation-practice-form'
+
+
+class AlertsFrameWindowsPageUrls:
+    BROWSER_WINDOWS = 'https://demoqa.com/browser-windows'
+    ALERTS = 'https://demoqa.com/alerts'

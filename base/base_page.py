@@ -78,6 +78,9 @@ class BasePage:
     def switch_tab_by_handle(self, handle: int) -> None:
         self.driver.switch_to.window(self.driver.window_handles[handle])
 
+    def switch_window_by_handle(self, handle: int) -> None:
+        self.driver.switch_to.window
+
     def remove_footer(self):
         self.driver.execute_script("document.getElementsByTagName('footer')[0].remove();")
         self.driver.execute_script("document.getElementById('fixedban').remove();")
