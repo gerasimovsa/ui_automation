@@ -89,7 +89,7 @@ class BasePage:
         self.driver.execute_script("document.getElementsByTagName('footer')[0].remove();")
         self.driver.execute_script("document.getElementById('fixedban').remove();")
 
-    def check_button_state_after_time(self, find_by: str, locator: str, condition: str, timeout: float = 10.0) -> bool:
+    def check_element_state_after_time(self, find_by: str, locator: str, condition: str, timeout: float = 10.0) -> bool:
         wait = WebDriverWait(self.driver, timeout)
         if condition == 'visible':
             try:
@@ -116,7 +116,7 @@ class BasePage:
         else:
             return False
 
-    def check_alert_is_present(self, timeout: float = 10.0) -> bool:
+    def check_alert_is_present_after_time(self, timeout: float = 10.0) -> bool:
         wait = WebDriverWait(self.driver, timeout)
         try:
             wait.until(ec.alert_is_present())
@@ -124,3 +124,4 @@ class BasePage:
         except TimeoutException as error:
             print(f'{error}\n Approximate elapsed time until alert is present is more than {timeout} seconds')
             return False
+

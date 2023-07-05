@@ -328,7 +328,7 @@ class DynamicPropsPage(BasePage):
         return rgba_color
 
     def check_button_is_visible_after(self, time_to_wait: float) -> bool:
-        return self.check_button_state_after_time('css', self.locators.VISIBLE_AFTER, 'visible', time_to_wait)
+        return self.check_element_state_after_time('css', self.locators.VISIBLE_AFTER, 'visible', time_to_wait)
 
     def check_button_is_clickable_after(self, time_to_wait: float) -> bool:
-        return self.check_button_state_after_time('css', self.locators.VISIBLE_AFTER, 'clickable', time_to_wait)
+        return self.check_element_state_after_time('css', self.locators.VISIBLE_AFTER, 'clickable', time_to_wait)
