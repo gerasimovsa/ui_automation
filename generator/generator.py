@@ -37,7 +37,7 @@ def generate_path(cat: str, extension: str) -> str:
     return path
 
 
-def generate_autocomplete_subject() -> str:
+def generate_subject() -> str:  # try to implement via dataclass
     subjects_list = [
         "Hindi",
         "English",

@@ -1,8 +1,4 @@
-import time
-
 import pytest
-
-from pom.elements_page import *
 from pom.forms_page import PracticeFormPage
 
 

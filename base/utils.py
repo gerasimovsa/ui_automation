@@ -1,5 +1,7 @@
 import base64
 import datetime
+import random
+
 from dateutil.relativedelta import relativedelta
 
 
@@ -24,4 +26,8 @@ class Utils:
         delta = str(relativedelta(today, date1).years)
         return delta
 
+    @staticmethod
+    def trim_string_end(string: str) -> str:
+        chars_to_trim = len(string)-random.randint(1, 2)
+        return string[0:chars_to_trim]
 

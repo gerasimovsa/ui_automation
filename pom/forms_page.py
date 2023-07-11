@@ -32,7 +32,7 @@ class PracticeFormPage(BasePage):
         random_city = cities_of_state[random.randint(0, len(cities_of_state) - 1)]
         person_info = next(generated_person())
         path = generate_file('text', 'png')
-        subject = generate_autocomplete_subject()
+        subject = generate_subject()
         self.remove_footer()
         self.is_visible('css', self.locators.FIRST_NAME, 'First name filed').send_keys(person_info.first_name)
         self.is_visible('css', self.locators.LAST_NAME, 'Last name filed').send_keys(person_info.last_name)

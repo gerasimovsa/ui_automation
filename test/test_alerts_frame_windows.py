@@ -1,5 +1,3 @@
-import random
-
 import pytest
 
 from pom.alerts_frame_windows_page import *

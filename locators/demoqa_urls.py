@@ -19,3 +19,11 @@ class AlertsFrameWindowsPageUrls:
     FRAMES = 'https://demoqa.com/frames'
     NESTED_FRAMES = 'https://demoqa.com/nestedframes'
     MODAL_DIALOGS = 'https://demoqa.com/modal-dialogs'
+
+
+class WidgetsPageUrls:
+    ACCORDIAN = 'https://demoqa.com/accordian'
+    AUTO_COMPLETE = 'https://demoqa.com/auto-complete'
+    DATE_PICKER = 'https://demoqa.com/date-picker'
+    SLIDER = 'https://demoqa.com/slider'
+    PROGRESS_BAR = 'https://demoqa.com/progress-bar'
