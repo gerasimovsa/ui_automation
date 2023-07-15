@@ -1,4 +1,5 @@
-from data.data import Person
+from base.utils import Utils
+from data.data import Person, Date
 from faker import Faker
 import random
 
@@ -37,7 +38,7 @@ def generate_path(cat: str, extension: str) -> str:
     return path
 
 
-def generate_subject() -> str:  # try to implement via dataclass
+def generate_subject() -> str:  # try to implement via the dataclass
     subjects_list = [
         "Hindi",
         "English",
@@ -55,3 +56,12 @@ def generate_subject() -> str:  # try to implement via dataclass
         "Civics"
     ]
     return subjects_list[random.randint(0, len(subjects_list) - 1)]
+
+
+def generate_date() -> str:
+    yield Date(
+        year=faker_en.year(),
+        month=faker_en.month_name(),
+        day=faker_en.day_of_month(),
+        time=Utils.random_15_minutes_interval_time()
+    )

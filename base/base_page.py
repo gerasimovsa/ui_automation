@@ -3,6 +3,7 @@ import time
 from selenium.webdriver import ActionChains
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as ec
+from selenium.webdriver.support.select import Select
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.remote.webelement import WebElement
 from selenium.common.exceptions import StaleElementReferenceException, TimeoutException
@@ -39,11 +40,11 @@ class BasePage:
         return self.__wait.until(ec.presence_of_element_located((self.__get_selenium_by(find_by), locator)),
                                  locator_name)
 
-    def is_not_present(self, find_by: str, locator: str, locator_name=None) -> WebElement:
+    def is_not_present(self, find_by: str, locator: str, locator_name=None) -> WebElement: #check when it may be used
         return self.__wait.until(ec.invisibility_of_element_located((self.__get_selenium_by(find_by), locator)),
                                  locator_name)
 
-    def is_clickable(self, find_by: str, locator: str, locator_name=None) -> WebElement:
+    def is_clickable(self, find_by: str, locator: str, locator_name=None) -> WebElement: #check when it may be used
         return self.__wait.until(ec.element_to_be_clickable((self.__get_selenium_by(find_by), locator)), locator_name)
 
     def are_visible(self, find_by: str, locator: str, locator_name=None) -> list[WebElement]:
@@ -63,6 +64,17 @@ class BasePage:
     def get_element_by_text(self, elements: list[WebElement], name: str) -> WebElement:
         name = name.lower()
         return [element for element in elements if element.text.lower() == name][0]
+
+    def select_from_element_by_text(self, locator: str, text: str):
+        element = self.is_visible('css', locator, "Getting element to select from")
+        Select(element).select_by_visible_text(text)
+
+    def click_on_element_by_text(self, locator: str, value: str):
+        elements = self.are_visible('css', locator, "Getting elements to select from")
+        for element in elements:
+            if element.text == value:
+                element.click()
+                break
 
     def delete_cookie(self, cookie_name: str) -> None:
         self.driver.delete_cookie(cookie_name)
