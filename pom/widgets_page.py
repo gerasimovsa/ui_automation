@@ -198,3 +198,20 @@ class TooltipsPage(BasePage):
             tooltip_text = self.is_visible('css', self.locators.ACTIVE_TOOLTIP, "Get tooltip text").text
             tooltips_text.append(tooltip_text)
         return tooltips_text
+
+
+class MenuPage(BasePage):
+    def __init__(self, driver):
+        super().__init__(driver)
+        self.driver = driver
+        self.url = WidgetsPageUrls.MENU
+        self.locators = MenuLocators()
+
+    def check_menu_items(self):
+        items_text = []
+        menu_items_list = self.are_present('css', self.locators.MENU_ITEMS, "Getting all the menu items")
+        for item in menu_items_list:
+            self.move_to_element(item)
+            items_text.append(item.text)
+        return items_text
+

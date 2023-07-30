@@ -29,3 +29,4 @@ class WidgetsPageUrls:
     PROGRESS_BAR = 'https://demoqa.com/progress-bar'
     TABS = 'https://demoqa.com/tabs'
     TOOLTIPS = 'https://demoqa.com/tool-tips'
+    MENU = 'https://demoqa.com/menu'

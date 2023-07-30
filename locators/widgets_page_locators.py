@@ -66,3 +66,6 @@ class TooltipsLocators:
 
     ACTIVE_TOOLTIP = "div[class='tooltip-inner']"
 
+
+class MenuLocators:
+    MENU_ITEMS = "ul[id='nav'] li a"

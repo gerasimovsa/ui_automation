@@ -1,9 +1,8 @@
-
 import pytest
 from pom.widgets_page import *
 
 
-@pytest.mark.usefixtures('setup')  # split up in classes later
+@pytest.mark.usefixtures('setup')
 class TestWidgetsPage:
     def test_accordian(self):
         widgets_page = WidgetsPage(self.driver)
@@ -82,3 +81,11 @@ class TestWidgetsPage:
             'You hovered over the 1.10.32']
         tooltips_text = tooltips_page.check_tooltips()
         assert tooltips_text == EXPECTED_TOOLTIPS_TEXT, "Validating that tooltips are correct"
+
+    def test_menu(self):
+        menu_page = MenuPage(self.driver)
+        menu_page.open_page()
+        EXPECTED_ITEMS_TEXT = ['Main Item 1', 'Main Item 2', 'Sub Item', 'Sub Item', 'SUB SUB LIST »', 'Sub Sub Item 1', 'Sub Sub Item 2', 'Main Item 3']
+        items_text = menu_page.check_menu_items()
+        assert items_text == EXPECTED_ITEMS_TEXT, "Validating that items of menu have a correct text"
+
