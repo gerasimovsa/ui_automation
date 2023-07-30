@@ -77,8 +77,8 @@ class TestWidgetsPage:
         tooltips_page.open_page()
         EXPECTED_TOOLTIPS_TEXT = [
             'You hovered over the Button',
-            'You hovered over the Button',
             'You hovered over the text field',
-            'You hovered over the Contrary']
+            'You hovered over the Contrary',
+            'You hovered over the 1.10.32']
         tooltips_text = tooltips_page.check_tooltips()
         assert tooltips_text == EXPECTED_TOOLTIPS_TEXT, "Validating that tooltips are correct"

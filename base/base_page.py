@@ -100,6 +100,7 @@ class BasePage:
     def move_to_element(self, element: WebElement):
         action = ActionChains(self.driver)
         action.move_to_element(element)
+        action.pause(1)
         action.perform()
 
     def get_alert_text(self) -> str:

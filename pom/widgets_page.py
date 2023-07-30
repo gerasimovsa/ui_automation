@@ -186,14 +186,15 @@ class TooltipsPage(BasePage):
     def check_tooltips(self) -> list:
         tooltips_text = []
         tooltip_element_locators = [
-            self.locators.HOVER_BUTTON,
-            self.locators.HOVER_FIELD,
-            self.locators.HOVER_LINK_TEXT,
-            self.locators.HOVER_LINK_NUMBERS
+            (self.locators.HOVER_BUTTON, self.locators.TOOLTIP_BUTTON),
+            (self.locators.HOVER_FIELD, self.locators.TOOLTIP_FIELD),
+            (self.locators.HOVER_LINK_TEXT, self.locators.TOOLTIP_LINK_TEXT),
+            (self.locators.HOVER_LINK_NUMBERS, self.locators.TOOLTIP_LINK_NUMBERS)
         ]
-        for locator in tooltip_element_locators:
-            element = self.is_visible('xpath', locator, "Get tooltip of element")
+        for item in tooltip_element_locators:
+            element = self.is_visible('xpath', item[0], "Get tooltip of element")
             self.move_to_element(element)
-            tooltip_text = self.is_visible('css', self.locators.ACTIVE_TOOLTIP, "Get tootip text").text
+            self.is_present('css', item[1], "State of hovered element is changed to 'Showing tooltip'")
+            tooltip_text = self.is_visible('css', self.locators.ACTIVE_TOOLTIP, "Get tooltip text").text
             tooltips_text.append(tooltip_text)
         return tooltips_text

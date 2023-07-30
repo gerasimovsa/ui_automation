@@ -53,8 +53,16 @@ class TabsLocators:
 
 class TooltipsLocators:
     HOVER_BUTTON = "//*[@id='toolTipButton']"
+    TOOLTIP_BUTTON = "button[aria-describedby='buttonToolTip']"
+
     HOVER_FIELD = "//*[@id='toolTipTextField']"
+    TOOLTIP_FIELD = "input[aria-describedby='textFieldToolTip']"
+
     HOVER_LINK_TEXT = "//*[.='Contrary']"
+    TOOLTIP_LINK_TEXT = "a[aria-describedby='contraryTexToolTip']"
+
     HOVER_LINK_NUMBERS = "//*[.='1.10.32']"
+    TOOLTIP_LINK_NUMBERS = "a[aria-describedby='sectionToolTip']"
+
     ACTIVE_TOOLTIP = "div[class='tooltip-inner']"
 
