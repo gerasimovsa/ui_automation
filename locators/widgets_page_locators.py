@@ -29,3 +29,32 @@ class DatePickerLocators:
     DATETIME_SELECT_DAY_LIST = "div[class*='react-datepicker__day react-datepicker__day']"
     DATETIME_SELECT_TIME_LIST = "li[class*='react-datepicker__time-list-item']"
     YEAR_SCROLL_DOWN = "a[class='react-datepicker__navigation react-datepicker__navigation--years react-datepicker__navigation--years-previous']"
+
+
+class SliderLocators:
+    SLIDER = "input[class='range-slider range-slider--primary']"
+    SLIDER_FIELD = "input[id='sliderValue']"
+
+
+class ProgressBarLocators:
+    PROGRESS_BAR = "div[id='progressBar']>div"
+    START_STOP_BUTTON = "button[id='startStopButton']"
+    RESET_BUTTON = "button[id='resetButton']"
+
+
+class TabsLocators:
+    FIRST_TAB_TITLE = "a[id='demo-tab-what']"
+    SECOND_TAB_TITLE = "a[id='demo-tab-origin']"
+    THIRD_TAB_TITLE = "a[id='demo-tab-use']"
+    FIRST_TAB_BODY = "div[id='demo-tabpane-what']>p"
+    SECOND_TAB_BODY = "div[id='demo-tabpane-origin']>p[class]"
+    THIRD_TAB_BODY = "div[id='demo-tabpane-use']>p"
+
+
+class TooltipsLocators:
+    HOVER_BUTTON = "//*[@id='toolTipButton']"
+    HOVER_FIELD = "//*[@id='toolTipTextField']"
+    HOVER_LINK_TEXT = "//*[.='Contrary']"
+    HOVER_LINK_NUMBERS = "//*[.='1.10.32']"
+    ACTIVE_TOOLTIP = "div[class='tooltip-inner']"
+

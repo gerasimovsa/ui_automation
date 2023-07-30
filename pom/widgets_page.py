@@ -25,7 +25,7 @@ class WidgetsPage(BasePage):
         }
         section_title = self.is_visible('css', accordian[section_num][0], "Get  section title")
         section_title.click()
-        section_content = self.is_visible('css', accordian[section_num][1], "Get  section title").text
+        section_content = self.is_visible('css', accordian[section_num][1], "Get  section body").text
         return [section_title.text, section_content]
 
 
@@ -113,3 +113,87 @@ class DataPickerPage(BasePage):
         datetime_field = self.is_visible('css', self.locators.DATETIME_FIELD, 'Get date time input')
         datetime_after = datetime_field.get_attribute('value')
         return datetime_before, datetime_after
+
+
+class SliderPage(BasePage):
+    def __init__(self, driver):
+        super().__init__(driver)
+        self.driver = driver
+        self.url = WidgetsPageUrls.SLIDER
+        self.locators = SliderLocators()
+
+    def increase_slider_value(self, count: int):
+        slider = self.is_visible('css', self.locators.SLIDER, "Getting slider")
+        slider_value = slider.get_attribute('value')
+        while count > 0:
+            slider.send_keys(Keys.RIGHT)
+            count -= 1
+        slider_field = self.is_visible('css', self.locators.SLIDER, "Getting slider form field")
+        slider_field_value = slider_field.get_attribute('value')
+        return slider_value, slider_field_value
+
+
+class ProgressBarPage(BasePage):
+    def __init__(self, driver):
+        super().__init__(driver)
+        self.driver = driver
+        self.url = WidgetsPageUrls.PROGRESS_BAR
+        self.locators = ProgressBarLocators()
+
+    def reset_progress_bar(self):
+        progress_bar = self.is_present('css', self.locators.PROGRESS_BAR, "Getting progress bar")
+        start_button = self.is_visible('css', self.locators.START_STOP_BUTTON, "Getting start button")
+        start_button.click()
+        reset_button_is_present = self.check_element_state_after_time('css', self.locators.RESET_BUTTON, 'present', 12)
+        if reset_button_is_present:
+            progress_bar_value = progress_bar.get_attribute('aria-valuenow')
+            self.is_visible('css', self.locators.RESET_BUTTON, "Clicking on reset button").click()
+        else:
+            pass
+        reset_progress_bar_value = progress_bar.get_attribute('aria-valuenow')
+        return progress_bar_value, reset_progress_bar_value
+
+
+class TabsPage(BasePage):
+    def __init__(self, driver):
+        super().__init__(driver)
+        self.driver = driver
+        self.url = WidgetsPageUrls.TABS
+        self.locators = TabsLocators()
+
+    def check_tabs(self) -> list:
+        tabs_text = []
+        tabs = {
+            "third": [self.locators.THIRD_TAB_TITLE, self.locators.THIRD_TAB_BODY],
+            "second": [self.locators.SECOND_TAB_TITLE, self.locators.SECOND_TAB_BODY],
+            "first": [self.locators.FIRST_TAB_TITLE, self.locators.FIRST_TAB_BODY]
+        }
+        for k, v in tabs.items():
+            title = self.is_visible('css', v[0], "Get tab title")
+            title.click()
+            body = self.is_visible('css', v[1], "Get tab body")
+            tabs_text.append((title.text, body.text))
+        return tabs_text
+
+
+class TooltipsPage(BasePage):
+    def __init__(self, driver):
+        super().__init__(driver)
+        self.driver = driver
+        self.url = WidgetsPageUrls.TOOLTIPS
+        self.locators = TooltipsLocators()
+
+    def check_tooltips(self) -> list:
+        tooltips_text = []
+        tooltip_element_locators = [
+            self.locators.HOVER_BUTTON,
+            self.locators.HOVER_FIELD,
+            self.locators.HOVER_LINK_TEXT,
+            self.locators.HOVER_LINK_NUMBERS
+        ]
+        for locator in tooltip_element_locators:
+            element = self.is_visible('xpath', locator, "Get tooltip of element")
+            self.move_to_element(element)
+            tooltip_text = self.is_visible('css', self.locators.ACTIVE_TOOLTIP, "Get tootip text").text
+            tooltips_text.append(tooltip_text)
+        return tooltips_text

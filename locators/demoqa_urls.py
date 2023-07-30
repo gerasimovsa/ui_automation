@@ -27,3 +27,5 @@ class WidgetsPageUrls:
     DATE_PICKER = 'https://demoqa.com/date-picker'
     SLIDER = 'https://demoqa.com/slider'
     PROGRESS_BAR = 'https://demoqa.com/progress-bar'
+    TABS = 'https://demoqa.com/tabs'
+    TOOLTIPS = 'https://demoqa.com/tool-tips'

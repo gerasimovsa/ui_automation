@@ -13,7 +13,7 @@ class BasePage:
     def __init__(self, driver, url='https://demoqa.com/'):
         self.driver = driver
         self.url = url
-        self.__wait = WebDriverWait(driver, 15, 0.3, ignored_exceptions=StaleElementReferenceException)
+        self.__wait = WebDriverWait(driver, 15, 0.5, ignored_exceptions=StaleElementReferenceException)
 
     def open_page(self):
         self.driver.get(self.url)
@@ -40,11 +40,11 @@ class BasePage:
         return self.__wait.until(ec.presence_of_element_located((self.__get_selenium_by(find_by), locator)),
                                  locator_name)
 
-    def is_not_present(self, find_by: str, locator: str, locator_name=None) -> WebElement: #check when it may be used
+    def is_not_present(self, find_by: str, locator: str, locator_name=None) -> WebElement:  # check when it may be used
         return self.__wait.until(ec.invisibility_of_element_located((self.__get_selenium_by(find_by), locator)),
                                  locator_name)
 
-    def is_clickable(self, find_by: str, locator: str, locator_name=None) -> WebElement: #check when it may be used
+    def is_clickable(self, find_by: str, locator: str, locator_name=None) -> WebElement:  # check when it may be used
         return self.__wait.until(ec.element_to_be_clickable((self.__get_selenium_by(find_by), locator)), locator_name)
 
     def are_visible(self, find_by: str, locator: str, locator_name=None) -> list[WebElement]:
@@ -92,6 +92,16 @@ class BasePage:
     def switch_tab_by_handle(self, handle: int) -> None:
         self.driver.switch_to.window(self.driver.window_handles[handle])
 
+    def drag_and_drop(self, element: WebElement, x_cord: int, y_cord: int):
+        action = ActionChains(self.driver)
+        action.drag_and_drop_by_offset(element, x_cord, y_cord)
+        action.perform()
+
+    def move_to_element(self, element: WebElement):
+        action = ActionChains(self.driver)
+        action.move_to_element(element)
+        action.perform()
+
     def get_alert_text(self) -> str:
         alert = self.driver.switch_to.alert
         text = alert.text
@@ -136,4 +146,3 @@ class BasePage:
         except TimeoutException as error:
             print(f'{error}\n Approximate elapsed time until alert is present is more than {timeout} seconds')
             return False
-
