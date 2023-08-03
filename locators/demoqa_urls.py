@@ -30,3 +30,4 @@ class WidgetsPageUrls:
     TABS = 'https://demoqa.com/tabs'
     TOOLTIPS = 'https://demoqa.com/tool-tips'
     MENU = 'https://demoqa.com/menu'
+    SELECT_MENU = 'https://demoqa.com/select-menu'

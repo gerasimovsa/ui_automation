@@ -69,3 +69,15 @@ class TooltipsLocators:
 
 class MenuLocators:
     MENU_ITEMS = "ul[id='nav'] li a"
+
+
+class SelectMenuLocators:
+    SELECT_VALUE_DROPDOWN = "input[id='react-select-2-input']"
+    SELECT_VALUE_DROPDOWN_RESULT = "//*[@id='withOptGroup']/div/div[1]/div[1]"
+
+    SELECT_ONE_DROPDOWN = "input[id='react-select-3-input']"
+    SELECT_ONE_DROPDOWN_RESULT = "//*[@id='selectOne']/div/div[1]/div[1]"
+
+    MULTISELECT_DROPDOWN = "input[id='react-select-4-input']"
+    MULTISELECT_DROPDOWN_RESULTS = "div[class='css-12jo7m5']"
+    REMOVE_ELEMENT_FROM_MULTISELECT = "div[class='css-1rhbuit-multiValue'] svg path"

@@ -2,12 +2,12 @@ import random
 import time
 
 from selenium.webdriver import Keys
-
 from base.base_page import BasePage
 from base.utils import Utils
 from generator.generator import generate_date
 from locators.demoqa_urls import WidgetsPageUrls
 from locators.widgets_page_locators import *
+from selenium.webdriver.support.select import Select
 
 
 class WidgetsPage(BasePage):
@@ -214,4 +214,49 @@ class MenuPage(BasePage):
             self.move_to_element(item)
             items_text.append(item.text)
         return items_text
+
+
+class SelectMenuPage(BasePage):
+    def __init__(self, driver):
+        super().__init__(driver)
+        self.driver = driver
+        self.url = WidgetsPageUrls.SELECT_MENU
+        self.locators = SelectMenuLocators()
+
+    def check_select_value(self):
+        single_select_values = [
+            "Group 1, option 1",
+            "Group 1, option 2",
+            "Group 2, option 1",
+            "Group 2, option 2",
+            "A root option",
+            "Another root option"
+        ]
+        random_value = single_select_values[random.randint(0, 5)]
+        single_select = self.is_visible('css', self.locators.SELECT_VALUE_DROPDOWN, "Select value input")
+        single_select.send_keys(random_value)
+        single_select.send_keys(Keys.RETURN)
+        current_value = self.is_present('xpath', self.locators.SELECT_VALUE_DROPDOWN_RESULT, "Select value result").text
+        return random_value, current_value
+
+    def check_one_value(self):
+        select_one_values = ["Dr.", "Mr.", "Mrs.", "Ms.", "Prof.", "Other"]
+        random_select_one_value = select_one_values[random.randint(0, 5)]
+        select_one = self.is_visible('css', self.locators.SELECT_ONE_DROPDOWN, "Select one input")
+        select_one.send_keys(random_select_one_value)
+        select_one.send_keys(Keys.RETURN)
+        current_select_one_value = self.is_present('xpath', self.locators.SELECT_ONE_DROPDOWN_RESULT, "Select one result").text
+        return random_select_one_value, current_select_one_value
+
+    def check_multiselect_dropdown(self):
+        color_names = ["Red", "Blue", "Green", "Black"]
+        multiselect_dropdown = self.is_visible('css', self.locators.MULTISELECT_DROPDOWN, "Getting multiselect dropdown")
+        for color in color_names:
+            multiselect_dropdown.send_keys(color)
+            multiselect_dropdown.send_keys(Keys.RETURN)
+        selected_colors = self.are_present('css', self.locators.MULTISELECT_DROPDOWN_RESULTS, "Multiselect results")
+        return color_names, [color.text for color in selected_colors]
+
+    # def clear_multiselect_dropdown(self):
+    #     remove_buttons = self.are_present('css', self.locators.REMOVE_ELEMENT_FROM_MULTISELECT, "Getting remove buttons")
 

@@ -1,11 +1,8 @@
 import pytest
-import selenium.webdriver.support.select
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options as chrome_options
 from selenium.webdriver.support.event_firing_webdriver import EventFiringWebDriver
 from abstract.selenium_listener import ClickListener
-from locators.demoqa_urls import ElementsPageUrls
-
 
 @pytest.fixture
 def get_chrome_options():
@@ -26,7 +23,7 @@ def get_webdriver(get_chrome_options):
 @pytest.fixture(scope='function')
 def setup(request, get_webdriver):
     driver = get_webdriver
-    #driver = EventFiringWebDriver(driver, ClickListener())  -   Delete cookie that detects that browser is driven by selenium
+    #driver = EventFiringWebDriver(driver, ClickListener()) - Delete cookie that detects that browser is driven by selenium
     if request.cls is not None:
         request.cls.driver = driver
    #driver.delete_all_cookies()

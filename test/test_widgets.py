@@ -89,3 +89,17 @@ class TestWidgetsPage:
         items_text = menu_page.check_menu_items()
         assert items_text == EXPECTED_ITEMS_TEXT, "Validating that items of menu have a correct text"
 
+    def test_select_menu(self):
+        select_menu_page = SelectMenuPage(self.driver)
+        select_menu_page.open_page()
+
+        select_input_value, select_current_value = select_menu_page.check_select_value()
+        assert select_input_value in select_current_value, "Validating select value field"
+
+        select_one_input_value, select_one_current_value = select_menu_page.check_one_value()
+        assert select_one_input_value in select_one_current_value, "Validating select one value field"
+
+        colors_list, selected_colors_list = select_menu_page.check_multiselect_dropdown()
+        assert selected_colors_list == colors_list, "Validating multiselect dropdown values field"
+
+

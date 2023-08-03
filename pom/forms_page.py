@@ -5,7 +5,6 @@ from selenium.webdriver import Keys
 from selenium.webdriver.support.select import Select
 
 from base.base_page import BasePage
-from base.utils import Utils
 from generator.generator import *
 from locators.demoqa_urls import *
 from locators.forms_page_locators import *
