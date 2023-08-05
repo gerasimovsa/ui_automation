@@ -1,3 +1,5 @@
+import time
+
 import pytest
 from pom.widgets_page import *
 
@@ -8,8 +10,10 @@ class TestWidgetsPage:
         widgets_page = WidgetsPage(self.driver)
         widgets_page.open_page()
         FIRST_SECTION_EXPECTED = ["What is Lorem Ipsum?", "Lorem Ipsum is simply dummy text"]
-        SECOND_SECTION_EXPECTED = ["Where does it come from?", "It has roots in a piece of classical Latin literature from 45 BC"]
-        THIRD_SECTION_EXPECTED = ["Why do we use it?", "Many desktop publishing packages and web page editors now use Lorem Ipsum as their default model text"]
+        SECOND_SECTION_EXPECTED = ["Where does it come from?",
+                                   "It has roots in a piece of classical Latin literature from 45 BC"]
+        THIRD_SECTION_EXPECTED = ["Why do we use it?",
+                                  "Many desktop publishing packages and web page editors now use Lorem Ipsum as their default model text"]
         second_section = widgets_page.check_accordian_section_content("second")
         third_section = widgets_page.check_accordian_section_content("third")
         first_section = widgets_page.check_accordian_section_content("first")
@@ -28,13 +32,13 @@ class TestWidgetsPage:
         values_number_before_delete, values_number_after_delete = auto_complete_page.get_autocomplete_values_number_after_delete()
         assert values_number_before_delete > values_number_after_delete, "Validating that value can be removed"
 
-    def test_date_picker(self):                                                                                         #rework later to check exact date
+    def test_date_picker(self):  # rework later to check exact date
         date_picker_page = DataPickerPage(self.driver)
         date_picker_page.open_page()
         date_value, updated_date = date_picker_page.select_date()
         assert date_value != updated_date, "Validating that date field value changes after input"
 
-    def test_date_time_picker(self):                                                                                    #rework later to check exact date
+    def test_date_time_picker(self):  # rework later to check exact date
         date_picker_page = DataPickerPage(self.driver)
         date_picker_page.open_page()
         datetime_value, updated_datetime = date_picker_page.select_date_time()
@@ -61,14 +65,18 @@ class TestWidgetsPage:
         EXPECTED_TABS_TEXT = [
             ("What", "Lorem Ipsum is simply dummy text"),
             ("Origin", "It has roots in a piece of classical Latin literature from 45 BC"),
-            ("Use", "Many desktop publishing packages and web page editors now use Lorem Ipsum as their default model text")
+            ("Use",
+             "Many desktop publishing packages and web page editors now use Lorem Ipsum as their default model text")
         ]
         tabs_title_body_text = tabs_page.check_tabs()
-        assert EXPECTED_TABS_TEXT[2][0] == tabs_title_body_text[0][0] and EXPECTED_TABS_TEXT[2][1] in tabs_title_body_text[0][1]\
+        assert EXPECTED_TABS_TEXT[2][0] == tabs_title_body_text[0][0] and EXPECTED_TABS_TEXT[2][1] in \
+               tabs_title_body_text[0][1] \
             , "Validating third tab title and content"
-        assert EXPECTED_TABS_TEXT[1][0] == tabs_title_body_text[1][0] and EXPECTED_TABS_TEXT[1][1] in tabs_title_body_text[1][1],\
+        assert EXPECTED_TABS_TEXT[1][0] == tabs_title_body_text[1][0] and EXPECTED_TABS_TEXT[1][1] in \
+               tabs_title_body_text[1][1], \
             "Validating second tab title and content"
-        assert EXPECTED_TABS_TEXT[0][0] == tabs_title_body_text[2][0] and EXPECTED_TABS_TEXT[0][1] in tabs_title_body_text[2][1],\
+        assert EXPECTED_TABS_TEXT[0][0] == tabs_title_body_text[2][0] and EXPECTED_TABS_TEXT[0][1] in \
+               tabs_title_body_text[2][1], \
             "Validating first tab title and content"
 
     def test_tooltips(self):
@@ -85,7 +93,8 @@ class TestWidgetsPage:
     def test_menu(self):
         menu_page = MenuPage(self.driver)
         menu_page.open_page()
-        EXPECTED_ITEMS_TEXT = ['Main Item 1', 'Main Item 2', 'Sub Item', 'Sub Item', 'SUB SUB LIST »', 'Sub Sub Item 1', 'Sub Sub Item 2', 'Main Item 3']
+        EXPECTED_ITEMS_TEXT = ['Main Item 1', 'Main Item 2', 'Sub Item', 'Sub Item', 'SUB SUB LIST »', 'Sub Sub Item 1',
+                               'Sub Sub Item 2', 'Main Item 3']
         items_text = menu_page.check_menu_items()
         assert items_text == EXPECTED_ITEMS_TEXT, "Validating that items of menu have a correct text"
 
@@ -99,7 +108,15 @@ class TestWidgetsPage:
         select_one_input_value, select_one_current_value = select_menu_page.check_one_value()
         assert select_one_input_value in select_one_current_value, "Validating select one value field"
 
+        expected_color, selected_color = select_menu_page.check_old_style_select()
+        assert selected_color == expected_color, "Validating old style select list"
+
         colors_list, selected_colors_list = select_menu_page.check_multiselect_dropdown()
         assert selected_colors_list == colors_list, "Validating multiselect dropdown values field"
 
+        items_removed_status = select_menu_page.are_multiselected_items_removed()
+        assert items_removed_status is True, "Validating that items from multiselect dropdown are removed"
+
+        expected_options, selected_options = select_menu_page.check_standart_multiselect()
+        assert selected_options == expected_options, "Validating standart multiselect list"
 

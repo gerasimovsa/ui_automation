@@ -1,6 +1,7 @@
 import random
 import time
 
+from selenium.common import TimeoutException
 from selenium.webdriver import Keys
 from base.base_page import BasePage
 from base.utils import Utils
@@ -207,7 +208,7 @@ class MenuPage(BasePage):
         self.url = WidgetsPageUrls.MENU
         self.locators = MenuLocators()
 
-    def check_menu_items(self):
+    def check_menu_items(self) -> list:
         items_text = []
         menu_items_list = self.are_present('css', self.locators.MENU_ITEMS, "Getting all the menu items")
         for item in menu_items_list:
@@ -223,7 +224,7 @@ class SelectMenuPage(BasePage):
         self.url = WidgetsPageUrls.SELECT_MENU
         self.locators = SelectMenuLocators()
 
-    def check_select_value(self):
+    def check_select_value(self) -> str:
         single_select_values = [
             "Group 1, option 1",
             "Group 1, option 2",
@@ -239,24 +240,57 @@ class SelectMenuPage(BasePage):
         current_value = self.is_present('xpath', self.locators.SELECT_VALUE_DROPDOWN_RESULT, "Select value result").text
         return random_value, current_value
 
-    def check_one_value(self):
+    def check_one_value(self) -> str:
         select_one_values = ["Dr.", "Mr.", "Mrs.", "Ms.", "Prof.", "Other"]
         random_select_one_value = select_one_values[random.randint(0, 5)]
         select_one = self.is_visible('css', self.locators.SELECT_ONE_DROPDOWN, "Select one input")
         select_one.send_keys(random_select_one_value)
         select_one.send_keys(Keys.RETURN)
-        current_select_one_value = self.is_present('xpath', self.locators.SELECT_ONE_DROPDOWN_RESULT, "Select one result").text
+        current_select_one_value = self.is_present('xpath', self.locators.SELECT_ONE_DROPDOWN_RESULT,
+                                                   "Select one result").text
         return random_select_one_value, current_select_one_value
 
-    def check_multiselect_dropdown(self):
+    def check_old_style_select(self) -> str:
+        color_names = {
+            "1": "Blue", "2": "Green", "3": "Yellow", "4": "Purple", "5": "Black", "6": "White", "7": "Voilet",
+            "8": "Indigo", "9": "Magenta",
+            "10": "Aqua"
+        }
+        random_value = str(random.randint(1, 10))
+        old_select = self.is_visible('css', self.locators.OLD_SELECT, "Getting old style select")
+        Select(old_select).select_by_value(random_value)
+        selected_colors_list = Select(old_select).all_selected_options
+        selected_colors = self.get_text_from_webelements(selected_colors_list)
+        return color_names[random_value].lower(), selected_colors[0]
+
+    def check_multiselect_dropdown(self) -> list:
         color_names = ["Red", "Blue", "Green", "Black"]
-        multiselect_dropdown = self.is_visible('css', self.locators.MULTISELECT_DROPDOWN, "Getting multiselect dropdown")
+        multiselect_dropdown = self.is_visible('css', self.locators.MULTISELECT_DROPDOWN,
+                                               "Getting multiselect dropdown")
         for color in color_names:
             multiselect_dropdown.send_keys(color)
             multiselect_dropdown.send_keys(Keys.RETURN)
         selected_colors = self.are_present('css', self.locators.MULTISELECT_DROPDOWN_RESULTS, "Multiselect results")
         return color_names, [color.text for color in selected_colors]
 
-    # def clear_multiselect_dropdown(self):
-    #     remove_buttons = self.are_present('css', self.locators.REMOVE_ELEMENT_FROM_MULTISELECT, "Getting remove buttons")
+    def are_multiselected_items_removed(self) -> bool:
+        remove_buttons = self.are_present('css', self.locators.REMOVE_ELEMENT_FROM_MULTISELECT, "Getting remove buttons")
+        for button in remove_buttons:
+            button.click()
+        try:
+            self.are_present('css', self.locators.MULTISELECT_DROPDOWN_RESULTS, "Multiselect results")
+            return False
+        except TimeoutException as error:
+            print(f'{error}\n Items of multiselect dropdown are removed')
+            return True
+
+    def check_standart_multiselect(self) -> list:
+        option_values = ["volvo", "saab", "opel", "audi"]
+        standart_select = self.is_visible('css', self.locators.STANDART_SELECT, "Getting standart select")
+        for option in option_values:
+            Select(standart_select).select_by_value(option)
+        selected_options_list = Select(standart_select).all_selected_options
+        selected_options = self.get_text_from_webelements(selected_options_list)
+        return option_values, selected_options
+
 

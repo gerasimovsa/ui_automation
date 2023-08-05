@@ -81,3 +81,6 @@ class SelectMenuLocators:
     MULTISELECT_DROPDOWN = "input[id='react-select-4-input']"
     MULTISELECT_DROPDOWN_RESULTS = "div[class='css-12jo7m5']"
     REMOVE_ELEMENT_FROM_MULTISELECT = "div[class='css-1rhbuit-multiValue'] svg path"
+
+    OLD_SELECT = "select[id='oldSelectMenu']"
+    STANDART_SELECT = "select[id='cars']"
