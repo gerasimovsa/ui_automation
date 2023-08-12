@@ -4,6 +4,8 @@ import random
 
 from dateutil.relativedelta import relativedelta
 
+from selenium.webdriver.remote.webelement import WebElement
+
 
 class Utils:
 
@@ -35,3 +37,10 @@ class Utils:
     def random_15_minutes_interval_time() -> str:
         time_list = pd.date_range("00:00", "23:59", freq="15min").strftime("%H:%M").to_list()
         return time_list[random.randint(0, len(time_list)-1)]
+
+    @staticmethod
+    def swap_list_elements_by_value(swap_list, first_value, second_value) -> list:
+        first_index = swap_list.index(first_value)
+        second_index = swap_list.index(second_value)
+        swap_list[first_index], swap_list[second_index] = swap_list[second_index], swap_list[first_index]
+        return swap_list

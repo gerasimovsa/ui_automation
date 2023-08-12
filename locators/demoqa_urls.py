@@ -31,3 +31,11 @@ class WidgetsPageUrls:
     TOOLTIPS = 'https://demoqa.com/tool-tips'
     MENU = 'https://demoqa.com/menu'
     SELECT_MENU = 'https://demoqa.com/select-menu'
+
+
+class InteractionsPageUrls:
+    SORTABLE = "https://demoqa.com/sortable"
+    SELECTABLE = "https://demoqa.com/selectable"
+    RESIZABLE = "https://demoqa.com/resizable"
+    DROPPABLE = "https://demoqa.com/droppable"
+    DRAGGABLE = "https://demoqa.com/draggable"

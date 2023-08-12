@@ -1,5 +1,4 @@
 import random
-import time
 
 from selenium.common import TimeoutException
 from selenium.webdriver import Keys
@@ -278,7 +277,7 @@ class SelectMenuPage(BasePage):
         for button in remove_buttons:
             button.click()
         try:
-            self.are_present('css', self.locators.MULTISELECT_DROPDOWN_RESULTS, "Multiselect results")
+            self.are_visible('css', self.locators.MULTISELECT_DROPDOWN_RESULTS, "Multiselect results")
             return False
         except TimeoutException as error:
             print(f'{error}\n Items of multiselect dropdown are removed')

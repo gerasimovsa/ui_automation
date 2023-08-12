@@ -90,9 +90,14 @@ class BasePage:
     def switch_tab_by_handle(self, handle: int) -> None:
         self.driver.switch_to.window(self.driver.window_handles[handle])
 
-    def drag_and_drop(self, element: WebElement, x_cord: int, y_cord: int):
+    def drag_and_drop_to_location(self, element: WebElement, x_cord: int, y_cord: int):
         action = ActionChains(self.driver)
         action.drag_and_drop_by_offset(element, x_cord, y_cord)
+        action.perform()
+
+    def drag_and_drop_to_element(self, element: WebElement, target_element: WebElement):
+        action = ActionChains(self.driver)
+        action.drag_and_drop(element, target_element)
         action.perform()
 
     def move_to_element(self, element: WebElement):
