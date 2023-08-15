@@ -14,3 +14,12 @@ class TestInteractionsPage:
 
         initial_grid_order, current_grid__order = sortable_page.drag_sortable_item_in_grid()
         assert current_grid__order != initial_grid_order, "Validating that sortable grid is rearranged"
+
+    def test_selectable(self):
+        selectable_page = SelectablePage(self.driver)
+        selectable_page.open_page()
+        items_to_select, selected_items = selectable_page.select_items_in_list(3)
+        assert selected_items == items_to_select, "Validating that correct items are selected in list"
+
+        items_to_select, selected_items = selectable_page.select_items_in_grid(6)
+        assert selected_items == items_to_select, "Validating that correct items are selected in grid"
