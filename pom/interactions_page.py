@@ -1,7 +1,8 @@
 import random
+import re
+from selenium.webdriver.remote.webelement import WebElement
 
 from base.base_page import BasePage
-from base.utils import Utils
 from locators.interactions_page_locators import *
 from locators.demoqa_urls import InteractionsPageUrls
 
@@ -41,7 +42,8 @@ class SelectablePage(BasePage):
         self.url = InteractionsPageUrls.SELECTABLE
         self.locators = SelectablePageLocators()
 
-    def select_items_in_list(self, items_count: int) -> list: #Convert this and following function into a single function with condition later
+    def select_items_in_list(self,
+                             items_count: int) -> list:  # Convert this and following function into a single function with condition later
         if items_count > 5 or items_count < 1:
             items_count = random.randint(1, 4)
         select_list_items = self.are_visible('css', self.locators.LIST_ITEMS, "Getting selectable list items")
@@ -61,3 +63,34 @@ class SelectablePage(BasePage):
             item.click()
         selected_items = self.are_present('css', self.locators.SELECTED_GRID_ITEMS, "Getting selected items")
         return [item.text for item in random_items].sort(), [item.text for item in selected_items].sort()
+
+
+class ResizablePage(BasePage):
+    def __init__(self, driver):
+        super().__init__(driver)
+        self.driver = driver
+        self.url = InteractionsPageUrls.RESIZABLE
+        self.locators = ResizablePageLocators()
+
+    def get_element_size_attribute(self, element: WebElement) -> list:
+        size = element.get_attribute('style')
+        formatted_size = re.findall(r'\d+', size)
+        return formatted_size
+
+    def change_resizable_box_size(self):
+        box = self.is_visible('css', self.locators.RESIZABLE_BOX, "Get resizable box")
+        box_handle = self.is_clickable('xpath', self.locators.RESIZABLE_BOX_HANDLE, "Getting resizable box handle")
+        self.drag_and_drop_to_location(box_handle, 400, 150)
+        max_size = self.get_element_size_attribute(box)
+        self.drag_and_drop_to_location(box_handle, -400, -150)
+        min_size = self.get_element_size_attribute(box)
+        return max_size, min_size
+
+    def change_resizable_object_size(self):
+        obj = self.is_visible('css', self.locators.RESIZABLE_OBJECT, "Get resizable object")
+        object_handle = self.is_clickable('xpath', self.locators.RESIZABLE_OBJECT_HANDLE, "Getting resizable object handle")
+        self.go_to_element(object_handle)
+        random_coords = [random.randint(100, 200), random.randint(100, 200)]
+        self.drag_and_drop_to_location(object_handle, random_coords[0], random_coords[1])
+        size = self.get_element_size_attribute(obj)
+        return size

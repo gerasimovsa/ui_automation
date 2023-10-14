@@ -16,3 +16,11 @@ class SelectablePageLocators:
     SELECTED_GRID_ITEMS = "li[class='list-group-item active list-group-item-action']"
 
 
+class ResizablePageLocators:
+    RESIZABLE_BOX = "div[id='resizableBoxWithRestriction']"
+    RESIZABLE_BOX_HANDLE = "//*[@id='resizableBoxWithRestriction']/span"
+
+    RESIZABLE_OBJECT = "div[id='resizable']"
+    RESIZABLE_OBJECT_HANDLE = "//*[@id='resizable']/span"
+
+
