@@ -24,3 +24,28 @@ class ResizablePageLocators:
     RESIZABLE_OBJECT_HANDLE = "//*[@id='resizable']/span"
 
 
+class DroppablePageLocators:
+    SIMPLE_TAB = "a[id='droppableExample-tab-simple']"
+    SIMPLE_DRAGGABLE = "div[id='draggable']"
+    SIMPLE_DROPPABLE = "#simpleDropContainer #droppable"
+
+
+    ACCEPT_TAB = "a[id='droppableExample-tab-accept']"
+    ACCEPTABLE = "div[id='acceptable']"
+    NOT_ACCEPTABLE = "div[id='notAcceptable']"
+    ACCEPT_BOX = "#droppableExample-tabpane-accept #droppable"
+
+    PREVENT_TAB = "a[id='droppableExample-tab-preventPropogation']"
+    DRAG_BOX = "div[id='dragBox']"
+    NON_GREEDY_OUTER = "div[id='notGreedyDropBox']>p"
+    NON_GREEDY_INNER = "div[id='notGreedyInnerDropBox']>p"
+    GREEDY_OUTER = "div[id='greedyDropBox']>p"
+    GREEDY_INNER = "div[id='greedyDropBoxInner']>p"
+
+    REVERT_TAB = "a[id='droppableExample-tab-revertable']"
+    REVERT_BOX = "div[id='revertable']"
+    NON_REVERT_BOX = "div[id='notRevertable']"
+    REVERT_DROPPABLE = "#revertableDropContainer #droppable"
+
+
+

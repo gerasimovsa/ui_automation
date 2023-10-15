@@ -33,3 +33,23 @@ class TestInteractionsPage:
 
         obj_size = resizable_page.change_resizable_object_size()
         assert obj_size != INITIAL_OBJ_SIZE, "Validating that size of resizable object is changed"
+
+    def test_droppable(self):
+        RESULT_DROPPED = "Dropped!"
+        RESULT_DROP_HERE = "Drop here"
+        droppable_page = DroppablePage(self.driver)
+        droppable_page.open_page()
+        non_acceptable, acceptable = droppable_page.drag_on_accept_droppable()
+        assert non_acceptable == RESULT_DROP_HERE, "Validating that droppable is not accepted"
+        assert acceptable == RESULT_DROPPED, "Validating that droppable is accepted"
+
+        simple_droppable = droppable_page.drag_on_simple_droppable()
+        assert simple_droppable == RESULT_DROPPED, "Validating simple droppable"
+
+        non_greedy, greedy = droppable_page.drag_on_propagated_droppable()
+        assert non_greedy == (RESULT_DROPPED, RESULT_DROPPED) and greedy == ("Outer droppable", RESULT_DROPPED),\
+            "Validating propagated droppable"
+
+        is_reverted, is_preserved, result_text = droppable_page.drag_on_revert_droppable()
+        assert is_reverted is True and is_preserved is True and result_text == RESULT_DROPPED, \
+            "Validating preserve and revert droppable"

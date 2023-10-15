@@ -1,5 +1,7 @@
 import random
 import re
+import time
+
 from selenium.webdriver.remote.webelement import WebElement
 
 from base.base_page import BasePage
@@ -70,7 +72,7 @@ class ResizablePage(BasePage):
         super().__init__(driver)
         self.driver = driver
         self.url = InteractionsPageUrls.RESIZABLE
-        self.locators = ResizablePageLocators()
+        self.locators = DroppablePageLocators()
 
     def get_element_size_attribute(self, element: WebElement) -> list:
         size = element.get_attribute('style')
@@ -88,9 +90,75 @@ class ResizablePage(BasePage):
 
     def change_resizable_object_size(self):
         obj = self.is_visible('css', self.locators.RESIZABLE_OBJECT, "Get resizable object")
-        object_handle = self.is_clickable('xpath', self.locators.RESIZABLE_OBJECT_HANDLE, "Getting resizable object handle")
+        object_handle = self.is_clickable('xpath', self.locators.RESIZABLE_OBJECT_HANDLE,
+                                          "Getting resizable object handle")
         self.go_to_element(object_handle)
         random_coords = [random.randint(100, 200), random.randint(100, 200)]
         self.drag_and_drop_to_location(object_handle, random_coords[0], random_coords[1])
         size = self.get_element_size_attribute(obj)
         return size
+
+
+class DroppablePage(BasePage):
+    def __init__(self, driver):
+        super().__init__(driver)
+        self.driver = driver
+        self.url = InteractionsPageUrls.DROPPABLE
+        self.locators = DroppablePageLocators()
+
+    def drag_on_accept_droppable(self):
+        self.is_visible("css", self.locators.ACCEPT_TAB, "Switching to Accept tab").click()
+        accept = self.is_visible("css", self.locators.ACCEPTABLE, "Getting accept draggable")
+        non_accept = self.is_visible("css", self.locators.NOT_ACCEPTABLE, "Getting not accept draggable")
+        accept_box = self.is_visible("css", self.locators.ACCEPT_BOX, "Getting accept dropbox")
+        self.drag_and_drop_to_element(non_accept, accept_box)
+        non_accept_result = accept_box.text
+        self.drag_and_drop_to_element(accept, accept_box)
+        accept_result = accept_box.text
+        return non_accept_result, accept_result
+
+    def drag_on_simple_droppable(self):
+        self.is_visible("css", self.locators.SIMPLE_TAB, "Switching to Simple tab").click()
+        simple_draggable = self.is_visible("css", self.locators.SIMPLE_DRAGGABLE, "Getting simple draggable")
+        simple_droppable = self.is_visible("css", self.locators.SIMPLE_DROPPABLE, "Getting simple droppable")
+        self.drag_and_drop_to_element(simple_draggable, simple_droppable)
+        simple_result = simple_droppable.text
+        return simple_result
+
+    def drag_on_propagated_droppable(self):
+        self.is_visible("css", self.locators.PREVENT_TAB, "Switching to Prevent Propagation tab").click()
+        drag_box = self.is_visible("css", self.locators.DRAG_BOX, "Getting drag box")
+        outer_non_greedy = self.is_visible("css", self.locators.NON_GREEDY_OUTER, "Getting outer non-greedy")
+        outer_greedy = self.is_visible("css", self.locators.GREEDY_OUTER, "Getting outer greedy")
+        inner_non_greedy = self.is_visible("css", self.locators.NON_GREEDY_INNER, "Getting inner non-greedy")
+        inner_greedy = self.is_visible("css", self.locators.GREEDY_INNER, "Getting inner greedy")
+
+        self.drag_and_drop_to_element(drag_box, inner_non_greedy)
+        non_greedy_outer_text = outer_non_greedy.text
+        non_greedy_inner_text = inner_non_greedy.text
+        non_greedy_result = (non_greedy_outer_text, non_greedy_inner_text)
+
+        self.go_to_element(inner_greedy)
+        self.drag_and_drop_to_element(drag_box, inner_greedy)
+        greedy_outer_text = outer_greedy.text
+        greedy_inner_text = inner_greedy.text
+        greedy_result = (greedy_outer_text, greedy_inner_text)
+        return non_greedy_result, greedy_result
+
+    def drag_on_revert_droppable(self):
+        self.is_visible("css", self.locators.REVERT_TAB, "Switching to Revert tab").click()
+        revert_droppable = self.is_visible("css", self.locators.REVERT_DROPPABLE, "Getting revert droppable")
+
+        revert_draggable = self.is_visible("css", self.locators.REVERT_BOX, "Getting revert drag box")
+        initial_draggable_location = revert_draggable.location
+        self.drag_and_drop_to_element(revert_draggable, revert_droppable)
+        time.sleep(1)
+        after_drag_revert_location = revert_draggable.location
+        is_reverted = after_drag_revert_location == initial_draggable_location
+
+        non_revert_draggable = self.is_visible("css", self.locators.NON_REVERT_BOX, "Getting non-revert drag box")
+        self.drag_and_drop_to_element(non_revert_draggable, revert_droppable)
+        time.sleep(1)
+        after_drag_non_revert_location = non_revert_draggable.location
+        is_preserved = after_drag_non_revert_location != initial_draggable_location
+        return is_reverted, is_preserved, revert_droppable.text
