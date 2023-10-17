@@ -29,7 +29,8 @@ class TestInteractionsPage:
         resizable_page = ResizablePage(self.driver)
         resizable_page.open_page()
         max_size, min_size = resizable_page.change_resizable_box_size()
-        assert max_size == MAX_BOX_SIZE and min_size == MIN_BOX_SIZE, "Validating that max and min clamps of resiable box"
+        assert max_size == MAX_BOX_SIZE and min_size == MIN_BOX_SIZE, \
+            "Validating that max and min clamps of resiable box"
 
         obj_size = resizable_page.change_resizable_object_size()
         assert obj_size != INITIAL_OBJ_SIZE, "Validating that size of resizable object is changed"
@@ -53,3 +54,29 @@ class TestInteractionsPage:
         is_reverted, is_preserved, result_text = droppable_page.drag_on_revert_droppable()
         assert is_reverted is True and is_preserved is True and result_text == RESULT_DROPPED, \
             "Validating preserve and revert droppable"
+
+    def test_draggable(self):
+        draggable_page = DraggablePage(self.driver)
+        draggable_page.open_page()
+        X_ONLY_INITIAL_LOC = (851, 407)
+        Y_ONLY_INITIAL_LOC = (569, 407)
+        MAX_BOT_RIGHT_BOX_LOC = (934, 510)
+        MAX_BOT_RIGHT_TEXT_LOC = (441, 711)
+        x_only_loc, y_only_loc = draggable_page.drag_axis_restricted_draggable()
+        assert x_only_loc[0] == X_ONLY_INITIAL_LOC[0] and x_only_loc[1] != X_ONLY_INITIAL_LOC[1],\
+            "Validating x restricted draggable"
+        assert y_only_loc[0] != Y_ONLY_INITIAL_LOC[0] and y_only_loc[1] == Y_ONLY_INITIAL_LOC[1],\
+            "Validating y restricted draggable"
+
+        initial_loc, updated_loc = draggable_page.drag_simple_draggable()
+        assert updated_loc != initial_loc, "Validating that box is dragged"
+
+        box_loc, text_loc = draggable_page.drag_restricted_draggable()
+        assert box_loc == MAX_BOT_RIGHT_BOX_LOC, "Validating that box is constrained"
+        assert text_loc == MAX_BOT_RIGHT_TEXT_LOC, "Validating that text is constrained"
+
+        y_axis_deviations = draggable_page.drag_cursor_style_draggable()
+        print(y_axis_deviations)
+        assert y_axis_deviations[0] in range(-10, 0), "Validating that center box has allowed deviation"
+        assert y_axis_deviations[1] in range(0, 60), "Validating that center box has allowed deviation"
+        assert y_axis_deviations[2] in range(-60, 0), "Validating that center box has allowed deviation"

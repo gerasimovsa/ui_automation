@@ -1,12 +1,13 @@
 import random
 import re
+import numpy
 import time
 
 from selenium.webdriver.remote.webelement import WebElement
 
 from base.base_page import BasePage
-from locators.interactions_page_locators import *
 from locators.demoqa_urls import InteractionsPageUrls
+from locators.interactions_page_locators import *
 
 
 class SortablePage(BasePage):
@@ -162,3 +163,60 @@ class DroppablePage(BasePage):
         after_drag_non_revert_location = non_revert_draggable.location
         is_preserved = after_drag_non_revert_location != initial_draggable_location
         return is_reverted, is_preserved, revert_droppable.text
+
+
+class DraggablePage(BasePage):
+    def __init__(self, driver):
+        super().__init__(driver)
+        self.driver = driver
+        self.url = InteractionsPageUrls.DRAGGABLE
+        self.locators = DraggablePageLocators()
+
+    def drag_axis_restricted_draggable(self):
+        self.is_visible('css', self.locators.AXIS_RESTRICTED_TAB, "Switching tab").click()
+        x_draggable = self.is_visible('css', self.locators.DRAG_BOX_ONLY_X, "Getting only x draggable")
+        y_draggable = self.is_visible('css', self.locators.DRAG_BOX_ONLY_Y, "Getting only y draggable")
+
+        random_offset_x = random.randint(100, 200)
+        random_offset_y = random.randint(100, 200)
+        self.drag_and_drop_to_location(x_draggable, random_offset_x, random_offset_y)
+        self.drag_and_drop_to_location(y_draggable, random_offset_x, random_offset_y)
+        updated_x_draggable_location = tuple(x_draggable.location.values())
+        updated_y_draggable_location = tuple(y_draggable.location.values())
+        return updated_x_draggable_location, updated_y_draggable_location
+
+    def drag_simple_draggable(self):
+        self.is_visible('css', self.locators.SIMPLE_TAB, "Switching tab").click()
+        drag_box = self.is_visible('css', self.locators.DRAG_BOX, "Getting draggable")
+        initial_drag_box_loc = tuple(drag_box.location.values())
+        random_offset_x = random.randint(100, 300)
+        random_offset_y = random.randint(100, 300)
+        self.drag_and_drop_to_location(drag_box, random_offset_x, random_offset_y)
+        updated_drag_box_loc = tuple(drag_box.location.values())
+        return initial_drag_box_loc, updated_drag_box_loc
+
+    def drag_restricted_draggable(self):
+        self.is_visible('css', self.locators.CONTAINER_RESTRICTED_TAB, "Switching tab").click()
+        r_box = self.is_visible('css', self.locators.RESTRICTED_BOX, "Get restricted box")
+        r_text = self.is_visible('css', self.locators.RESTRICTED_TEXT, "Get restricted text")
+        self.drag_with_cursor(r_box, 1050, 650)
+        box_bot_right_clamp = tuple(r_box.location.values())
+        self.go_to_element(r_text)
+        self.drag_with_cursor(r_text, 1000, 500)
+        text_bot_right_clamp = tuple(r_text.location.values())
+        return box_bot_right_clamp, text_bot_right_clamp
+
+    def drag_cursor_style_draggable(self):
+        self.is_visible('css', self.locators.CURSOR_STYLE_TAB, "Switching tab").click()
+        box_center = self.is_visible('css', self.locators.CURSOR_CENTER, "Getting center cursor")
+        box_top_left = self.is_visible('css', self.locators.CURSOR_TOP_LEFT, "Getting top left cursor")
+        box_bottom = self.is_visible('css', self.locators.CURSOR_BOTTOM, "Getting bottom cursor")
+        draggable_boxes = [box_center, box_top_left, box_bottom]
+        diffs = []
+        for box in draggable_boxes:
+            initial_loc = tuple(box.location.values())
+            self.drag_and_drop_to_location(box, 200, 0)
+            updated_loc = tuple(box.location.values())
+            diff = numpy.subtract(updated_loc, initial_loc)
+            diffs.append(diff[1])
+        return diffs

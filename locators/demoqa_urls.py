@@ -38,4 +38,4 @@ class InteractionsPageUrls:
     SELECTABLE = "https://demoqa.com/selectable"
     RESIZABLE = "https://demoqa.com/resizable"
     DROPPABLE = "https://demoqa.com/droppable"
-    DRAGGABLE = "https://demoqa.com/draggable"
+    DRAGGABLE = "https://demoqa.com/dragabble"

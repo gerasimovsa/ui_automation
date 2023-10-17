@@ -1,4 +1,5 @@
 from selenium.webdriver import ActionChains
+from selenium.webdriver.common.actions.action_builder import ActionBuilder
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as ec
 from selenium.webdriver.support.select import Select
@@ -98,6 +99,25 @@ class BasePage:
     def drag_and_drop_to_element(self, element: WebElement, target_element: WebElement):
         action = ActionChains(self.driver)
         action.drag_and_drop(element, target_element)
+        action.perform()
+
+    def hold_move_release_element(self, element: WebElement, x_cord: int, y_cord: int):
+        action = ActionChains(self.driver)
+        action.click_and_hold(element)
+        action.move_by_offset(x_cord, y_cord)
+        action.release()
+        action.perform()
+
+    def drag_with_cursor(self, element, x_coord, y_coord):
+        action = ActionBuilder(self.driver)
+        action.pointer_action.click_and_hold(element)
+        action.pointer_action.move_to_location(x_coord, y_coord)
+        action.pointer_action.release()
+        action.perform()
+
+    def move_cursor_to_location(self, x_cord: int, y_cord: int):
+        action = ActionBuilder(self.driver)
+        action.pointer_action.move_to_location(x_cord, y_cord)
         action.perform()
 
     def move_to_element(self, element: WebElement):

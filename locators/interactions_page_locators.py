@@ -47,5 +47,25 @@ class DroppablePageLocators:
     NON_REVERT_BOX = "div[id='notRevertable']"
     REVERT_DROPPABLE = "#revertableDropContainer #droppable"
 
+class DraggablePageLocators:
+    SIMPLE_TAB = "a[id='draggableExample-tab-simple']"
+    DRAG_BOX = "div[id='dragBox']"
+
+    AXIS_RESTRICTED_TAB = "a[id='draggableExample-tab-axisRestriction']"
+    DRAG_BOX_ONLY_Y = "div[id='restrictedX']"
+    DRAG_BOX_ONLY_X = "div[id='restrictedY']"
+
+    CONTAINER_RESTRICTED_TAB = "a[id='draggableExample-tab-containerRestriction']"
+    RESTRICTIVE_CONTAINER = "div[id='containmentWrapper']"
+    RESTRICTED_BOX = "div[id='containmentWrapper']>div"
+    RESTRICTIVE_WIDGET = "div[class='draggable ui-widget-content m-3']"
+    RESTRICTED_TEXT = "div[class='draggable ui-widget-content m-3']>span"
+
+    CURSOR_STYLE_TAB = "a[id='draggableExample-tab-cursorStyle']"
+    CURSOR_CENTER = "div[id='cursorCenter']"
+    CURSOR_TOP_LEFT = "div[id='cursorTopLeft']"
+    CURSOR_BOTTOM = "div[id='cursorBottom']"
+
+
 
 
