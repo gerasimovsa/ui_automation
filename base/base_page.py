@@ -13,7 +13,7 @@ class BasePage:
     def __init__(self, driver, url='https://demoqa.com/'):
         self.driver = driver
         self.url = url
-        self.__wait = WebDriverWait(driver, 15, 0.5, ignored_exceptions=StaleElementReferenceException)
+        self.__wait = WebDriverWait(driver, 15, 1, ignored_exceptions=StaleElementReferenceException)
 
     def open_page(self):
         self.driver.get(self.url)
