@@ -33,7 +33,9 @@ class TextBoxPage(BasePage):
             self.is_visible('css', self.locators.EMAIL, 'Email field').send_keys(email)
             self.is_visible('css', self.locators.CURRENT_ADDRESS, 'Current Address field').send_keys(current_address)
             self.is_visible('css', self.locators.PERMANENT_ADDRESS, 'Permanent Address field').send_keys(permanent_address)
-            self.is_visible('css', self.locators.SUBMIT).click()
+            submit = self.is_visible('css', self.locators.SUBMIT)
+            self.go_to_element(submit)
+            submit.click()
         return Utils.remove_newline([full_name, email, current_address, permanent_address])
 
     @allure.step("Getting field values of result form")
@@ -272,6 +274,7 @@ class LinksPage(BasePage):
         status_codes = []
         messages = []
         for api_call_link in api_call_links:
+            self.go_to_element(api_call_link)
             api_call_link.click()
             time.sleep(1)
             response_text = self.is_present('css', self.locators.LINK_RESPONSE, 'Getting response text').text

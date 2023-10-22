@@ -57,7 +57,10 @@ class TestElementsPage:
             submitted_person = web_table.submit_registration_form()
             search_keyword = submitted_person[random.randint(0, 5)]
             web_table.fill_search_field(search_keyword)
+            time.sleep(1)  # Necessary to work
             table_row = web_table.get_raw_text_by_delete_button()
+            print(search_keyword)
+            print(table_row)
             assert search_keyword in table_row, 'Validating that entering in search filed displays correct entry in the table'
 
         @allure.title("Rows dropdown test")
@@ -97,7 +100,7 @@ class TestElementsPage:
             response_code, response_message = links_page.check_api_call_links()
             expected_status_code = links_page.send_calls_get_status_code()
             for k, v in zip(expected_status_message, response_message):
-                assert k in v, 'Validating that response message corresponds to link text '
+                assert k in v, 'Validating that response message corresponds to link text'
             assert response_code == expected_status_code, 'Validating that status code corresponds to URL status code'
 
     @allure.feature("Upload Download Page")

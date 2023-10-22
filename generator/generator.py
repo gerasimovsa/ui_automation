@@ -25,7 +25,7 @@ def generated_person():
 def generate_file(cat: str, extension: str) -> str:
     dummy_data = faker_en.word()
     dummy_filename = faker_en.file_name(category=cat, extension=extension)
-    path = rf'C:\Users\Sergey_Gerasimov\PycharmProjects\ui_automation\{random.randint(0, 999)}_{dummy_filename}'
+    path = rf'D:\{random.randint(0, 999)}_{dummy_filename}'
     file = open(path, 'w+')
     file.write(dummy_data)
     file.close()

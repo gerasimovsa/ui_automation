@@ -1,3 +1,4 @@
+
 import pytest
 import allure
 from pom.widgets_page import *
@@ -16,8 +17,7 @@ class TestWidgetsPage:
             SECOND_SECTION_EXPECTED = ["Where does it come from?",
                                        "It has roots in a piece of classical Latin literature from 45 BC"]
             THIRD_SECTION_EXPECTED = ["Why do we use it?",
-                                      "Many desktop publishing packages and web page editors now use Lorem Ipsum as their "
-                                      "default model text"]
+                                      "It is a long established fact that a reader will be distracted"]
             second_section = widgets_page.check_accordian_section_content("second")
             third_section = widgets_page.check_accordian_section_content("third")
             first_section = widgets_page.check_accordian_section_content("first")
@@ -64,7 +64,7 @@ class TestWidgetsPage:
             value_to_add = random.randint(1, 75)
             slider_value, slider_field_value = slider_page.increase_slider_value(value_to_add)
             expected_slider_value = int(slider_value) + value_to_add
-            assert slider_field_value == expected_slider_value, "Validating that slider value can be increased"
+            assert int(slider_field_value) == expected_slider_value, "Validating that slider value can be increased"
 
     @allure.feature("Progress Bar")
     class TestProgressBarPage:
@@ -153,4 +153,4 @@ class TestWidgetsPage:
             assert items_removed_status is True, "Validating that items from multiselect dropdown are removed"
 
             expected_options, selected_options = select_menu_page.check_standart_multiselect()
-            assert selected_options == expected_options, "Validating standart multiselect list"
+            assert selected_options == expected_options, "Validating standard multiselect list"

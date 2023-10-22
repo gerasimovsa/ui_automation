@@ -1,5 +1,6 @@
 import os
 import calendar
+from datetime import datetime
 
 import allure
 from selenium.webdriver import Keys
@@ -54,9 +55,6 @@ class PracticeFormPage(BasePage):
             days = self.are_visible('xpath', self.locators.DATEPICKER_DAY, 'Date day')
             days[random.randint(0, len(days) - 1)].click()
             date_of_birth = date_of_birth_field.get_attribute("value").lower()
-            short_month = calendar.month_abbr[int(random_month)+1].lower()
-            full_month = calendar.month_name[int(random_month)+1].lower()
-            date_with_full_month = date_of_birth.replace(short_month, full_month)
 
         with allure.step("Filling autocomplete fields"):
             self.is_visible('css', self.locators.SUBJECT, 'Subject field').send_keys(subject)
@@ -81,7 +79,7 @@ class PracticeFormPage(BasePage):
                       person_info.email,
                       gender,
                       person_info.phone_number[:10],
-                      date_with_full_month,
+                      date_of_birth,
                       subject,
                       hobby,
                       filename,

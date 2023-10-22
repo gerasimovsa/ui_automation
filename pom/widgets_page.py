@@ -1,4 +1,5 @@
 import random
+import time
 
 import allure
 from selenium.common import TimeoutException
@@ -26,6 +27,7 @@ class WidgetsPage(BasePage):
             "third": [self.locators.THIRD_SECTION_TITLE, self.locators.THIRD_SECTION_BODY]
         }
         section_title = self.is_visible('css', accordian[section_num][0], "Get  section title")
+        self.go_to_element(section_title)
         section_title.click()
         section_content = self.is_visible('css', accordian[section_num][1], "Get  section body").text
         return [section_title.text, section_content]
@@ -291,9 +293,11 @@ class SelectMenuPage(BasePage):
 
     @allure.step("Are items removed from selection")
     def are_multiselected_items_removed(self) -> bool:
-        remove_buttons = self.are_present('css', self.locators.REMOVE_ELEMENT_FROM_MULTISELECT, "Getting remove buttons")
+        remove_buttons = self.are_visible('css', self.locators.REMOVE_ELEMENT_FROM_MULTISELECT,
+                                          "Getting remove buttons")
         for button in remove_buttons:
             button.click()
+            time.sleep(1)  # For some reason it is necessary to click each button
         try:
             self.are_visible('css', self.locators.MULTISELECT_DROPDOWN_RESULTS, "Multiselect results")
             return False
@@ -304,11 +308,10 @@ class SelectMenuPage(BasePage):
     @allure.step("Selecting in standard multiselect")
     def check_standart_multiselect(self) -> list:
         option_values = ["volvo", "saab", "opel", "audi"]
-        standard_select = self.is_visible('css', self.locators.STANDART_SELECT, "Getting standart select")
+        standard_select = self.is_visible('css', self.locators.STANDART_SELECT, "Getting standard select")
+        self.go_to_element(standard_select)
         for option in option_values:
             Select(standard_select).select_by_value(option)
         selected_options_list = Select(standard_select).all_selected_options
         selected_options = self.get_text_from_webelements(selected_options_list)
         return option_values, selected_options
-
-
