@@ -6,7 +6,6 @@ from webdriver_manager.chrome import ChromeDriverManager
 from selenium.webdriver.support.event_firing_webdriver import EventFiringWebDriver
 from abstract.selenium_listener import ClickListener
 
-
 @pytest.fixture
 def get_chrome_options():
     options = Options()
@@ -20,8 +19,10 @@ def get_chrome_options():
 def get_webdriver(get_chrome_options):
     options = get_chrome_options
     install_chromedriver = Service(ChromeDriverManager().install())
-    driver = webdriver.Chrome(service=install_chromedriver, options=options)  # #or use executable_pass to chromedriver.exe'
+    driver = webdriver.Chrome(service=install_chromedriver,
+                              options=options)  # #or use executable_pass to chromedriver.exe'
     return driver
+
 
 @pytest.fixture(scope='function')
 def setup(request, get_webdriver):

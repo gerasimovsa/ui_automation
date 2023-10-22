@@ -1,3 +1,4 @@
+import re
 from selenium.webdriver import ActionChains
 from selenium.webdriver.common.actions.action_builder import ActionBuilder
 from selenium.webdriver.common.by import By
@@ -54,6 +55,8 @@ class BasePage:
         return self.__wait.until(ec.presence_of_all_elements_located((self.__get_selenium_by(find_by), locator)),
                                  locator_name)
 
+    def has_text(self, text: str) -> WebElement:
+        return self.__wait.until(ec.presence_of_element_located((self.__get_selenium_by("xpath"), f"//*[text()='{text}']")))
     def get_text_from_webelements(self, elements: list[WebElement]) -> list[str]:
         return [element.text.lower() for element in elements]
 
@@ -68,7 +71,7 @@ class BasePage:
         element = self.is_visible('css', locator, "Getting element to select from")
         Select(element).select_by_visible_text(text)
 
-    def click_on_element_by_text(self, locator: str, value: str):
+    def click_on_element_with_text(self, locator: str, value: str):
         elements = self.are_visible('css', locator, "Getting elements to select from")
         for element in elements:
             if element.text == value:
@@ -130,6 +133,11 @@ class BasePage:
         alert = self.driver.switch_to.alert
         text = alert.text
         return text
+
+    def get_element_size_attribute(self, element: WebElement) -> list:
+        size = element.get_attribute('style')
+        formatted_size = re.findall(r'\d+', size)
+        return formatted_size
 
     def remove_footer(self):
         self.driver.execute_script("document.getElementsByTagName('footer')[0].remove();")

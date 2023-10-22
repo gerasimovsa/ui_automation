@@ -39,3 +39,7 @@ class InteractionsPageUrls:
     RESIZABLE = "https://demoqa.com/resizable"
     DROPPABLE = "https://demoqa.com/droppable"
     DRAGGABLE = "https://demoqa.com/dragabble"
+
+
+class BookStoreApplicationPageUrls:
+    BOOKSTORE = "https://demoqa.com/books"

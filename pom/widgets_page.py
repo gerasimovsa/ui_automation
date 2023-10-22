@@ -1,5 +1,6 @@
 import random
 
+import allure
 from selenium.common import TimeoutException
 from selenium.webdriver import Keys
 from base.base_page import BasePage
@@ -17,6 +18,7 @@ class WidgetsPage(BasePage):
         self.url = WidgetsPageUrls.ACCORDIAN
         self.locators = AccordianPageLocators()
 
+    @allure.step("Getting title and content of accordian tabs")
     def check_accordian_section_content(self, section_num: str) -> list:
         accordian = {
             "first": [self.locators.FIRST_SECTION_TITLE, self.locators.FIRST_SECTION_BODY],
@@ -36,6 +38,7 @@ class AutoCompletePage(BasePage):
         self.url = WidgetsPageUrls.AUTO_COMPLETE
         self.locators = AutoCompletePageLocators()
 
+    @allure.step("Trim color name")
     def generate_trimmed_color_names(self) -> list:
         color_names = ["Red", "Blue", "Green", "Yellow", "Purple", "Black", "White", "Voilet", "Indigo", "Magenta",
                        "Aqua"]  # try to implement via the dataclass
@@ -48,6 +51,7 @@ class AutoCompletePage(BasePage):
             count -= 1
         return multiple_color_names, [Utils.trim_string_end(name) for name in multiple_color_names]
 
+    @allure.step("Fill multiple value autocomplete with color names")
     def fill_multiple_values_autocomplete(self, color_names: list) -> list:
         multiple_colors_field = self.is_present('css', self.locators.AUTOCOMPLETE_MULTIPLE,
                                                 'Get multiple colors autocomplete field')
@@ -58,6 +62,7 @@ class AutoCompletePage(BasePage):
                                        'Get multiple colors autocomplete field input values')
         return [input_name.text for input_name in name_inputs]
 
+    @allure.step("Fill single value autocomplete with color name")
     def fill_single_values_autocomplete(self, color_names: list) -> str:
         single_colors_field = self.is_present('css', self.locators.AUTOCOMPLETE_SINGLE,
                                               'Get single color autocomplete field')
@@ -68,7 +73,8 @@ class AutoCompletePage(BasePage):
                                      'Get single color autocomplete field input value')
         return name_input.text
 
-    def get_autocomplete_values_number_after_delete(self):
+    @allure.step("Get field values after deleting one")
+    def get_autocomplete_values_after_delete(self):
         name_inputs = self.are_present('css', self.locators.MULTIPLE_COLOR_NAMES_INPUTS,
                                        'Get multiple colors autocomplete field input values')
         number_before_delete = len(name_inputs)
@@ -88,6 +94,7 @@ class DataPickerPage(BasePage):
         self.url = WidgetsPageUrls.DATE_PICKER
         self.locators = DatePickerLocators()
 
+    @allure.step("Selecting date")
     def select_date(self):
         date = next(generate_date())
         date_field = self.is_visible('css', self.locators.DATE_FIELD, 'Get date input')
@@ -95,21 +102,22 @@ class DataPickerPage(BasePage):
         date_field.click()
         self.select_from_element_by_text(self.locators.DATE_SELECT_YEAR, date.year)
         self.select_from_element_by_text(self.locators.DATE_SELECT_MONTH, date.month)
-        self.click_on_element_by_text(self.locators.DATE_SELECT_DAY_LIST, date.day)
+        self.click_on_element_with_text(self.locators.DATE_SELECT_DAY_LIST, date.day)
         date_after = date_field.get_attribute('value')
         return date_before, date_after
 
+    @allure.step("Selecting date and time")
     def select_date_time(self):
         date = next(generate_date())
         datetime_field = self.is_visible('css', self.locators.DATETIME_FIELD, 'Get date time input')
         datetime_before = datetime_field.get_attribute('value')
         datetime_field.click()
         self.is_visible('css', self.locators.DATETIME_SELECT_YEAR, 'Year dropdown').click()
-        self.click_on_element_by_text(self.locators.DATETIME_SELECT_YEAR_LIST, str(random.randint(2018, 2028)))
+        self.click_on_element_with_text(self.locators.DATETIME_SELECT_YEAR_LIST, str(random.randint(2018, 2028)))
         self.is_visible('css', self.locators.DATETIME_SELECT_MONTH, 'Month dropdown').click()
-        self.click_on_element_by_text(self.locators.DATETIME_SELECT_MONTH_LIST, date.month)
-        self.click_on_element_by_text(self.locators.DATE_SELECT_DAY_LIST, date.day)
-        self.click_on_element_by_text(self.locators.DATETIME_SELECT_TIME_LIST, date.time)
+        self.click_on_element_with_text(self.locators.DATETIME_SELECT_MONTH_LIST, date.month)
+        self.click_on_element_with_text(self.locators.DATE_SELECT_DAY_LIST, date.day)
+        self.click_on_element_with_text(self.locators.DATETIME_SELECT_TIME_LIST, date.time)
         datetime_field = self.is_visible('css', self.locators.DATETIME_FIELD, 'Get date time input')
         datetime_after = datetime_field.get_attribute('value')
         return datetime_before, datetime_after
@@ -122,6 +130,7 @@ class SliderPage(BasePage):
         self.url = WidgetsPageUrls.SLIDER
         self.locators = SliderLocators()
 
+    @allure.step("Sending right key to increase slider value")
     def increase_slider_value(self, count: int):
         slider = self.is_visible('css', self.locators.SLIDER, "Getting slider")
         slider_value = slider.get_attribute('value')
@@ -140,6 +149,7 @@ class ProgressBarPage(BasePage):
         self.url = WidgetsPageUrls.PROGRESS_BAR
         self.locators = ProgressBarLocators()
 
+    @allure.step("Reset progress bar after starting the progress")
     def reset_progress_bar(self):
         progress_bar = self.is_present('css', self.locators.PROGRESS_BAR, "Getting progress bar")
         start_button = self.is_visible('css', self.locators.START_STOP_BUTTON, "Getting start button")
@@ -161,6 +171,7 @@ class TabsPage(BasePage):
         self.url = WidgetsPageUrls.TABS
         self.locators = TabsLocators()
 
+    @allure.step("Getting text of the tabs")
     def check_tabs(self) -> list:
         tabs_text = []
         tabs = {
@@ -183,6 +194,7 @@ class TooltipsPage(BasePage):
         self.url = WidgetsPageUrls.TOOLTIPS
         self.locators = TooltipsLocators()
 
+    @allure.step("Getting tooltip text")
     def check_tooltips(self) -> list:
         tooltips_text = []
         tooltip_element_locators = [
@@ -207,6 +219,7 @@ class MenuPage(BasePage):
         self.url = WidgetsPageUrls.MENU
         self.locators = MenuLocators()
 
+    @allure.step("Getting text of menu items")
     def check_menu_items(self) -> list:
         items_text = []
         menu_items_list = self.are_present('css', self.locators.MENU_ITEMS, "Getting all the menu items")
@@ -223,6 +236,7 @@ class SelectMenuPage(BasePage):
         self.url = WidgetsPageUrls.SELECT_MENU
         self.locators = SelectMenuLocators()
 
+    @allure.step("Selecting random options in select menu")
     def check_select_value(self) -> str:
         single_select_values = [
             "Group 1, option 1",
@@ -239,6 +253,7 @@ class SelectMenuPage(BasePage):
         current_value = self.is_present('xpath', self.locators.SELECT_VALUE_DROPDOWN_RESULT, "Select value result").text
         return random_value, current_value
 
+    @allure.step("Selecting one option in select menu")
     def check_one_value(self) -> str:
         select_one_values = ["Dr.", "Mr.", "Mrs.", "Ms.", "Prof.", "Other"]
         random_select_one_value = select_one_values[random.randint(0, 5)]
@@ -249,6 +264,7 @@ class SelectMenuPage(BasePage):
                                                    "Select one result").text
         return random_select_one_value, current_select_one_value
 
+    @allure.step("Selecting in old style select")
     def check_old_style_select(self) -> str:
         color_names = {
             "1": "Blue", "2": "Green", "3": "Yellow", "4": "Purple", "5": "Black", "6": "White", "7": "Voilet",
@@ -262,6 +278,7 @@ class SelectMenuPage(BasePage):
         selected_colors = self.get_text_from_webelements(selected_colors_list)
         return color_names[random_value].lower(), selected_colors[0]
 
+    @allure.step("Selecting in multiselect dropdown")
     def check_multiselect_dropdown(self) -> list:
         color_names = ["Red", "Blue", "Green", "Black"]
         multiselect_dropdown = self.is_visible('css', self.locators.MULTISELECT_DROPDOWN,
@@ -272,6 +289,7 @@ class SelectMenuPage(BasePage):
         selected_colors = self.are_present('css', self.locators.MULTISELECT_DROPDOWN_RESULTS, "Multiselect results")
         return color_names, [color.text for color in selected_colors]
 
+    @allure.step("Are items removed from selection")
     def are_multiselected_items_removed(self) -> bool:
         remove_buttons = self.are_present('css', self.locators.REMOVE_ELEMENT_FROM_MULTISELECT, "Getting remove buttons")
         for button in remove_buttons:
@@ -283,12 +301,13 @@ class SelectMenuPage(BasePage):
             print(f'{error}\n Items of multiselect dropdown are removed')
             return True
 
+    @allure.step("Selecting in standard multiselect")
     def check_standart_multiselect(self) -> list:
         option_values = ["volvo", "saab", "opel", "audi"]
-        standart_select = self.is_visible('css', self.locators.STANDART_SELECT, "Getting standart select")
+        standard_select = self.is_visible('css', self.locators.STANDART_SELECT, "Getting standart select")
         for option in option_values:
-            Select(standart_select).select_by_value(option)
-        selected_options_list = Select(standart_select).all_selected_options
+            Select(standard_select).select_by_value(option)
+        selected_options_list = Select(standard_select).all_selected_options
         selected_options = self.get_text_from_webelements(selected_options_list)
         return option_values, selected_options
 

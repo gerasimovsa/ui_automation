@@ -3,6 +3,7 @@ import os
 import time
 import requests as r
 import re
+import allure
 from base.base_page import BasePage
 from generator.generator import *
 from locators.elements_page_locators import *
@@ -20,19 +21,22 @@ class TextBoxPage(BasePage):
         self.url = ElementsPageUrls.TEXT_BOX
         self.locators = TextBoxPageLocators()
 
+    @allure.step("Filling all the field of the form and submitting")
     def fill_all_fields(self) -> [str]:
         person_info = next(generated_person())
         full_name = person_info.full_name
         email = person_info.email
         current_address = person_info.current_address
         permanent_address = person_info.permanent_address
-        self.is_visible('css', self.locators.FULL_NAME, 'Full name filed').send_keys(full_name)
-        self.is_visible('css', self.locators.EMAIL, 'Email field').send_keys(email)
-        self.is_visible('css', self.locators.CURRENT_ADDRESS, 'Current Address field').send_keys(current_address)
-        self.is_visible('css', self.locators.PERMANENT_ADDRESS, 'Permanent Address field').send_keys(permanent_address)
-        self.is_visible('css', self.locators.SUBMIT).click()
+        with allure.step("Sending keys to fields"):
+            self.is_visible('css', self.locators.FULL_NAME, 'Full name filed').send_keys(full_name)
+            self.is_visible('css', self.locators.EMAIL, 'Email field').send_keys(email)
+            self.is_visible('css', self.locators.CURRENT_ADDRESS, 'Current Address field').send_keys(current_address)
+            self.is_visible('css', self.locators.PERMANENT_ADDRESS, 'Permanent Address field').send_keys(permanent_address)
+            self.is_visible('css', self.locators.SUBMIT).click()
         return Utils.remove_newline([full_name, email, current_address, permanent_address])
 
+    @allure.step("Getting field values of result form")
     def get_output_forms_text(self) -> list[str]:
         full_name = self.is_present('css', self.locators.CREATED_FULL_NAME, 'Get Name output text').text.split(':')[1]
         email = self.is_present('css', self.locators.CREATED_EMAIL, 'Get Email output text').text.split(':')[1]
@@ -52,9 +56,11 @@ class CheckBoxPage(BasePage):
         self.url = ElementsPageUrls.CHECK_BOX
         self.locators = CheckBoxPageLocators()
 
+    @allure.step("Clicking on expand checkbox button")
     def expand_checkbox_list(self) -> None:
         self.is_visible('css', self.locators.EXPAND_ALL_BUTTON, 'Expand hierarchy of checkboxes').click()
 
+    @allure.step("Clicking random checkboxes")
     def click_random_checkboxes(self):
         item_list = self.are_visible('css', self.locators.CHECKBOXES, 'Check random checkboxes')
         count = 15
@@ -67,6 +73,7 @@ class CheckBoxPage(BasePage):
             else:
                 break
 
+    @allure.step("Getting checked checkboxes")
     def get_checked_checkboxes_text(self) -> list[str]:
         checked_list = self.are_present('css', self.locators.CHECKED_CHECKBOXES)
         checked_checkboxes_titles = []
@@ -75,6 +82,7 @@ class CheckBoxPage(BasePage):
         checked_checkboxes_text = self.get_text_from_webelements(checked_checkboxes_titles)
         return Utils.format_checkbox_strings(checked_checkboxes_text)
 
+    @allure.step("Getting formatted checkbox strings")
     def get_output_results_text(self) -> list[str]:
         output_list = self.are_present('css', self.locators.OUTPUT_RESULTS)
         output_list_text = self.get_text_from_webelements(output_list)
@@ -88,10 +96,12 @@ class RadioButtonPage(BasePage):
         self.url = ElementsPageUrls.RADIO_BUTTON
         self.locators = RadioButtonPageLocators()
 
+    @allure.step("Getting text of redio buttons")
     def get_active_rbs_text(self) -> list[str]:
         active_rbs = self.are_visible('css', self.locators.ACTIVE_RADIO_BUTTONS, 'Get active radio buttons text')
         return self.get_text_from_webelements(active_rbs)
 
+    @allure.step("Getting text of radio buttons after click")
     def get_output_after_rb_click(self) -> list[str]:
         active_rbs = self.are_visible('css', self.locators.ACTIVE_RADIO_BUTTONS, 'Get active radio buttons')
         output = []
@@ -101,22 +111,15 @@ class RadioButtonPage(BasePage):
             output.append(current_output)
         return output
 
-        """""
-        choices = {
-            'yes': self.locators.YES_RADIO,
-            'impressive': self.locators.IMPRESSIVE_RADIO,
-            'no': self.locators.NO_RADIO
-        }
-        """""
 
-
-class WebTablesPage(BasePage):  # store CONSTANT expected results here
+class WebTablesPage(BasePage):
     def __init__(self, driver):
         super().__init__(driver)
         self.driver = driver
         self.url = ElementsPageUrls.WEB_TABLES
         self.locators = WebTablePagePageLocators()
 
+    @allure.step("Fill registration form with generated data and submit")
     def submit_registration_form(self, count: int = 5) -> list[str]:
         person_info = next(generated_person())
         first_name = person_info.first_name
@@ -137,6 +140,7 @@ class WebTablesPage(BasePage):  # store CONSTANT expected results here
             count -= 1
             return [first_name, last_name, str(age), email, str(salary), department]
 
+    @allure.step("Get data from result table")
     def get_table_entries(self):
         people_list = self.are_present('css', self.locators.TABLE_ROWS, "Getting entries from table")
         data = []
@@ -144,14 +148,17 @@ class WebTablesPage(BasePage):  # store CONSTANT expected results here
             data.append(item.text.splitlines())
         return data
 
+    @allure.step("Sending keyword into search field")
     def fill_search_field(self, keyword: str):
         self.is_visible('css', self.locators.SEARCH_BOX, 'Entering into search box').send_keys(keyword)
 
+    @allure.step("Get rows of table that has Delete button")
     def get_raw_text_by_delete_button(self):
         delete_button = self.is_present('css', self.locators.DELETE_BUTTONS, 'Find all rows with delete buttons')
         row = delete_button.find_element(By.XPATH, self.locators.ROW_PARENT)
         return row.text.splitlines()
 
+    @allure.step("Edit table row")
     def edit_table_entry(self) -> str:
         person_info = next(generated_person())
         first_name = person_info.first_name
@@ -176,14 +183,17 @@ class WebTablesPage(BasePage):  # store CONSTANT expected results here
         self.is_visible('css', self.locators.SUBMIT, 'Click on Submit button').click()
         return person_info_list[random_index]
 
+    @allure.step("Delete table row")
     def delete_table_entry(self) -> str:
         self.is_visible('css', self.locators.DELETE_BUTTONS, 'Clicking on Delete button').click()
         return self.is_present('css', self.locators.NO_ROWS_FOUND, 'No rows found message').text
 
+    @allure.step("Get number of rows")
     def get_rows_count(self) -> int:
         table_rows = self.are_present('css', self.locators.TABLE_ROWS, 'Getting table rows')
         return len(table_rows)
 
+    @allure.step("Select from rows dropdown")
     def select_from_rows_dropdown(self) -> list[int]:
         rows_numbers = [5, 10, 20]
         data = []
@@ -206,6 +216,7 @@ class ButtonsPage(BasePage):
         self.SUCCESS_CLICK_TEXT = ['You have done a double click', 'You have done a right click',
                                    'You have done a dynamic click']
 
+    @allure.step("Clicking on each button")
     def click_on_each_button(self, click_type: str) -> str:
         if click_type == 'double':
             self.action_doubleclick(
@@ -241,6 +252,7 @@ class LinksPage(BasePage):
             'invalid-url'
         ]
 
+    @allure.step("Getting response from home link")
     def check_home_link(self) -> str:
         home_link = self.is_visible('css', self.locators.HOME_LINK, 'Getting home link')
         home_link_href = home_link.get_attribute("href")
@@ -253,6 +265,7 @@ class LinksPage(BasePage):
         else:
             return f'Invalid status code. Response status code: {response.status_code}. Link href: {home_link_href}'
 
+    @allure.step("Getting responses from links")
     def check_api_call_links(self) -> list[str]:
         api_call_locators = self.locators.API_CALL_LINKS
         api_call_links = [self.is_visible('css', link_locator) for link_locator in api_call_locators]
@@ -269,6 +282,7 @@ class LinksPage(BasePage):
             messages.append(message)
         return status_codes, messages
 
+    @allure.step("Getting response codes from links")
     def send_calls_get_status_code(self) -> list[str]:
         api_call_urls = [f'https://demoqa.com/{link}' for link in self.API_CALL_URLS]
         response_codes = []
@@ -277,6 +291,7 @@ class LinksPage(BasePage):
             response_codes.append(str(response.status_code))
         return response_codes
 
+    @allure.step("Getting text of links")
     def get_api_call_links_text(self) -> list[str]:
         api_call_locators = self.locators.API_CALL_LINKS
         api_call_links = [self.is_visible('css', link_locator) for link_locator in api_call_locators]
@@ -291,6 +306,7 @@ class UploadDownloadPage(BasePage):
         self.url = ElementsPageUrls.UPLOAD_AND_DOWNLOAD
         self.locators = UploadDownloadPageLocators()
 
+    @allure.step("Uploading generated file")
     def upload_file(self) -> str:
         path = generate_file('text', 'txt')
         upload_button = self.is_present('css', self.locators.UPLOAD_BUTTON, "Getting upload button")
@@ -300,6 +316,7 @@ class UploadDownloadPage(BasePage):
         os.remove(path)
         return file_name, uploaded_file_name
 
+    @allure.step("Downloading file and then removing it")
     def download_file(self) -> bool:
         path = generate_path('img', 'jpeg')
         image_link = self.is_visible('css', self.locators.DOWNLOAD_BUTTON).get_attribute('href')
@@ -321,14 +338,17 @@ class DynamicPropsPage(BasePage):
         self.locators = DynamicPropsPageLocators()
         self.RED_COLOR = 'rgba(220, 53, 69, 1)'
 
+    @allure.step("Check color ogf button after time")
     def check_color_change_after(self) -> str:
         self.is_present('css', self.locators.DETECT_COLOR_CHANGE, 'Checking that class of button changed')
         color_button = self.is_present('css', self.locators.COLOR_CHANGE_BUTTON, 'Getting color change button')
         rgba_color = color_button.value_of_css_property('color')
         return rgba_color
 
+    @allure.step("Check if button is visible after time")
     def check_button_is_visible_after(self, time_to_wait: float) -> bool:
         return self.check_element_state_after_time('css', self.locators.VISIBLE_AFTER, 'visible', time_to_wait)
 
+    @allure.step("Check if button is clickable after time")
     def check_button_is_clickable_after(self, time_to_wait: float) -> bool:
         return self.check_element_state_after_time('css', self.locators.VISIBLE_AFTER, 'clickable', time_to_wait)

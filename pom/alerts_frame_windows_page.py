@@ -1,3 +1,6 @@
+from typing import Tuple
+
+import allure
 from base.base_page import BasePage
 from generator.generator import *
 from locators.alerts_frame_windows_page_locators import *
@@ -11,6 +14,7 @@ class WindowsPage(BasePage):
         self.url = AlertsFrameWindowsPageUrls.BROWSER_WINDOWS
         self.locators = BrowserWindowsPageLocators()
 
+    @allure.step("Getting new window text")
     def get_new_window_text(self, button_to_click: str):
         button_locators = {
             "tab": self.locators.NEW_TAB_BUTTON,
@@ -18,7 +22,8 @@ class WindowsPage(BasePage):
         }
         new_window_button = self.is_visible("css", button_locators[button_to_click], "Get new window button")
         new_window_button.click()
-        self.switch_tab_by_handle(1)
+        with allure.step("Switching tab by handle"):
+            self.switch_tab_by_handle(1)
         new_window_header_text = self.is_present("css", self.locators.NEW_WINDOW_HEADER,
                                                  "Getting header text in the new window").text
         return new_window_header_text
@@ -31,17 +36,20 @@ class AlertsPage(BasePage):
         self.url = AlertsFrameWindowsPageUrls.ALERTS
         self.locators = AlertsPageLocators()
 
+    @allure.step("Clicking on alert")
     def check_click_alert(self) -> str:
         alert_click_button = self.is_visible("css", self.locators.ALERT_BUTTON, "Get click alert button")
         alert_click_button.click()
         alert_text = self.get_alert_text()
         return alert_text
 
+    @allure.step("Checking that alert is present after time")
     def check_timer_alert(self, time_to_wait: float) -> bool:
         alert_timer_button = self.is_visible("css", self.locators.TIMER_ALERT_BUTTON, "Get timer alert button")
         alert_timer_button.click()
         return self.check_alert_is_present_after_time(time_to_wait)
 
+    @allure.step("Clicking on alert confirmation")
     def check_confirm_alert(self, option: str) -> str:
         alert_confirmation_button = self.is_visible("css", self.locators.CONFIRM_BUTTON, "Get confirm alert button")
         alert_confirmation_button.click()
@@ -56,7 +64,8 @@ class AlertsPage(BasePage):
                                               "Get confirm result field text").text
         return confirmation_result
 
-    def check_prompt_alert(self) -> str:
+    @allure.step("Filling prompt field and clicking ok")
+    def check_prompt_alert(self) -> tuple[str, str]:
         prompt_alert_button = self.is_visible("css", self.locators.PROMPT_BUTTON, "Get prompt alert button")
         prompt_alert_button.click()
         person_info = next(generated_person())
@@ -64,7 +73,8 @@ class AlertsPage(BasePage):
         prompt_alert = self.driver.switch_to.alert
         prompt_alert.send_keys(full_name)
         prompt_alert.accept()
-        prompt_result_text = self.is_visible("css", self.locators.PROMPT_RESULT, "Get prompt result field text").text
+        prompt_result_text = self.is_visible("css", self.locators.PROMPT_RESULT,
+                                             "Get prompt result field text").text
         return full_name, prompt_result_text
 
 
@@ -75,6 +85,7 @@ class FramesPage(BasePage):
         self.url = AlertsFrameWindowsPageUrls.FRAMES
         self.locators = FramesPageLocators()
 
+    @allure.step("Getting text, width and height of the frames")
     def check_frame(self, frame_num: int) -> list:
         if frame_num == 1:
             frame = self.is_present("css", self.locators.FRAME_1, "Get the first frame")
@@ -95,7 +106,8 @@ class NestedFramesPage(BasePage):
         self.url = AlertsFrameWindowsPageUrls.NESTED_FRAMES
         self.locators = NestedFramesPageLocators()
 
-    def check_nested_frame(self) -> str:
+    @allure.step("Getting text of nested frames")
+    def check_nested_frame(self) -> tuple[str, str]:
         parent_frame = self.is_present("css", self.locators.PARENT_FRAME, "Get the parent frame")
         self.driver.switch_to.frame(parent_frame)
         parent_text = self.is_present("css", self.locators.PARENT_FRAME_TEXT, "Get the parent frame text").text
@@ -112,6 +124,7 @@ class ModalDialogsPage(BasePage):
         self.url = AlertsFrameWindowsPageUrls.MODAL_DIALOGS
         self.locators = ModalDialogsPageLocators()
 
+    @allure.step("Getting number of symbols on small and large modal windows")
     def check_modal_windows(self) -> list:
         small_modal_button = self.is_present("css", self.locators.SMALL_MODAL_BUTTON, "Get the small modal button")
         small_modal_button.click()

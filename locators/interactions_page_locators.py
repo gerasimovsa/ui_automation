@@ -1,4 +1,3 @@
-
 class SortablePageLocators:
     LIST_TAB = "a[id='demo-tab-list']"
     LIST_ITEMS = "div[id='demo-tabpane-list'] div[class='list-group-item list-group-item-action']"
@@ -29,7 +28,6 @@ class DroppablePageLocators:
     SIMPLE_DRAGGABLE = "div[id='draggable']"
     SIMPLE_DROPPABLE = "#simpleDropContainer #droppable"
 
-
     ACCEPT_TAB = "a[id='droppableExample-tab-accept']"
     ACCEPTABLE = "div[id='acceptable']"
     NOT_ACCEPTABLE = "div[id='notAcceptable']"
@@ -46,6 +44,7 @@ class DroppablePageLocators:
     REVERT_BOX = "div[id='revertable']"
     NON_REVERT_BOX = "div[id='notRevertable']"
     REVERT_DROPPABLE = "#revertableDropContainer #droppable"
+
 
 class DraggablePageLocators:
     SIMPLE_TAB = "a[id='draggableExample-tab-simple']"
@@ -65,7 +64,3 @@ class DraggablePageLocators:
     CURSOR_CENTER = "div[id='cursorCenter']"
     CURSOR_TOP_LEFT = "div[id='cursorTopLeft']"
     CURSOR_BOTTOM = "div[id='cursorBottom']"
-
-
-
-

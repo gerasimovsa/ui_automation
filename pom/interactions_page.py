@@ -1,5 +1,6 @@
 import random
-import re
+
+import allure
 import numpy
 import time
 
@@ -17,6 +18,7 @@ class SortablePage(BasePage):
         self.url = InteractionsPageUrls.SORTABLE
         self.locators = SortablePageLocators()
 
+    @allure.step("Reorder items in sortable list")
     def drag_sortable_item_in_list(self) -> list:
         sortable_list_items = self.are_visible('css', self.locators.LIST_ITEMS, "Getting sortable list items")
         initial_order = self.get_text_from_webelements(sortable_list_items)
@@ -26,6 +28,7 @@ class SortablePage(BasePage):
         current_order = self.get_text_from_webelements(self.are_visible('css', self.locators.LIST_ITEMS, ""))
         return initial_order, current_order
 
+    @allure.step("Reorder items in sortable grid")
     def drag_sortable_item_in_grid(self) -> list:
         grid_tab_button = self.is_visible('css', self.locators.GRID_TAB, "Clicking or grid button")
         grid_tab_button.click()
@@ -45,6 +48,7 @@ class SelectablePage(BasePage):
         self.url = InteractionsPageUrls.SELECTABLE
         self.locators = SelectablePageLocators()
 
+    @allure.step("Select items in the list")
     def select_items_in_list(self,
                              items_count: int) -> list:  # Convert this and following function into a single function with condition later
         if items_count > 5 or items_count < 1:
@@ -56,6 +60,7 @@ class SelectablePage(BasePage):
         selected_items = self.are_present('css', self.locators.SELECTED_LIST_ITEMS, "Getting selected items")
         return [item.text for item in random_items].sort(), [item.text for item in selected_items].sort()
 
+    @allure.step("Select items in the grid")
     def select_items_in_grid(self, items_count: int) -> str:
         self.is_visible('css', self.locators.GRID_TAB, "Switching to grid tab").click()
         if items_count > 9 or items_count < 1:
@@ -73,13 +78,9 @@ class ResizablePage(BasePage):
         super().__init__(driver)
         self.driver = driver
         self.url = InteractionsPageUrls.RESIZABLE
-        self.locators = DroppablePageLocators()
+        self.locators = ResizablePageLocators()
 
-    def get_element_size_attribute(self, element: WebElement) -> list:
-        size = element.get_attribute('style')
-        formatted_size = re.findall(r'\d+', size)
-        return formatted_size
-
+    @allure.step("Dragging resizable box handle")
     def change_resizable_box_size(self):
         box = self.is_visible('css', self.locators.RESIZABLE_BOX, "Get resizable box")
         box_handle = self.is_clickable('xpath', self.locators.RESIZABLE_BOX_HANDLE, "Getting resizable box handle")
@@ -89,6 +90,7 @@ class ResizablePage(BasePage):
         min_size = self.get_element_size_attribute(box)
         return max_size, min_size
 
+    @allure.step("Dragging resizable object handle")
     def change_resizable_object_size(self):
         obj = self.is_visible('css', self.locators.RESIZABLE_OBJECT, "Get resizable object")
         object_handle = self.is_clickable('xpath', self.locators.RESIZABLE_OBJECT_HANDLE,
@@ -107,6 +109,7 @@ class DroppablePage(BasePage):
         self.url = InteractionsPageUrls.DROPPABLE
         self.locators = DroppablePageLocators()
 
+    @allure.step("Dragging on accept box")
     def drag_on_accept_droppable(self):
         self.is_visible("css", self.locators.ACCEPT_TAB, "Switching to Accept tab").click()
         accept = self.is_visible("css", self.locators.ACCEPTABLE, "Getting accept draggable")
@@ -118,6 +121,7 @@ class DroppablePage(BasePage):
         accept_result = accept_box.text
         return non_accept_result, accept_result
 
+    @allure.step("Dragging simple box")
     def drag_on_simple_droppable(self):
         self.is_visible("css", self.locators.SIMPLE_TAB, "Switching to Simple tab").click()
         simple_draggable = self.is_visible("css", self.locators.SIMPLE_DRAGGABLE, "Getting simple draggable")
@@ -126,6 +130,7 @@ class DroppablePage(BasePage):
         simple_result = simple_droppable.text
         return simple_result
 
+    @allure.step("Dragging on propagated box")
     def drag_on_propagated_droppable(self):
         self.is_visible("css", self.locators.PREVENT_TAB, "Switching to Prevent Propagation tab").click()
         drag_box = self.is_visible("css", self.locators.DRAG_BOX, "Getting drag box")
@@ -146,6 +151,7 @@ class DroppablePage(BasePage):
         greedy_result = (greedy_outer_text, greedy_inner_text)
         return non_greedy_result, greedy_result
 
+    @allure.step("Dragging on revert location box")
     def drag_on_revert_droppable(self):
         self.is_visible("css", self.locators.REVERT_TAB, "Switching to Revert tab").click()
         revert_droppable = self.is_visible("css", self.locators.REVERT_DROPPABLE, "Getting revert droppable")
@@ -172,6 +178,7 @@ class DraggablePage(BasePage):
         self.url = InteractionsPageUrls.DRAGGABLE
         self.locators = DraggablePageLocators()
 
+    @allure.step("Dragging with box restricted axis")
     def drag_axis_restricted_draggable(self):
         self.is_visible('css', self.locators.AXIS_RESTRICTED_TAB, "Switching tab").click()
         x_draggable = self.is_visible('css', self.locators.DRAG_BOX_ONLY_X, "Getting only x draggable")
@@ -185,6 +192,7 @@ class DraggablePage(BasePage):
         updated_y_draggable_location = tuple(y_draggable.location.values())
         return updated_x_draggable_location, updated_y_draggable_location
 
+    @allure.step("Dragging simple draggable")
     def drag_simple_draggable(self):
         self.is_visible('css', self.locators.SIMPLE_TAB, "Switching tab").click()
         drag_box = self.is_visible('css', self.locators.DRAG_BOX, "Getting draggable")
@@ -195,6 +203,7 @@ class DraggablePage(BasePage):
         updated_drag_box_loc = tuple(drag_box.location.values())
         return initial_drag_box_loc, updated_drag_box_loc
 
+    @allure.step("Dragging restricted draggable")
     def drag_restricted_draggable(self):
         self.is_visible('css', self.locators.CONTAINER_RESTRICTED_TAB, "Switching tab").click()
         r_box = self.is_visible('css', self.locators.RESTRICTED_BOX, "Get restricted box")
@@ -206,6 +215,7 @@ class DraggablePage(BasePage):
         text_bot_right_clamp = tuple(r_text.location.values())
         return box_bot_right_clamp, text_bot_right_clamp
 
+    @allure.step("Dragging cursor style draggable")
     def drag_cursor_style_draggable(self):
         self.is_visible('css', self.locators.CURSOR_STYLE_TAB, "Switching tab").click()
         box_center = self.is_visible('css', self.locators.CURSOR_CENTER, "Getting center cursor")

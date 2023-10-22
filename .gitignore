@@ -5,3 +5,4 @@ __pycache__/
 .mypy_cache/
 /.idea/
 /venv/
+/allure_results/
