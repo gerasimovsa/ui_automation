@@ -5,7 +5,7 @@ import allure
 from pom.forms_page import PracticeFormPage
 
 
-@pytest.mark.usefixtures('setup')
+@pytest.mark.usefixtures("setup_and_teardown")
 @allure.suite("Forms Page")
 class TestFormsPage:
     @allure.feature("Practice Forms")

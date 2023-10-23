@@ -4,7 +4,7 @@ import allure
 from pom.widgets_page import *
 
 
-@pytest.mark.usefixtures('setup')
+@pytest.mark.usefixtures("setup_and_teardown")
 @allure.suite("Widgets Page")
 class TestWidgetsPage:
     @allure.feature("Accordian")

@@ -3,7 +3,7 @@ import allure
 from pom.interactions_page import *
 
 
-@pytest.mark.usefixtures('setup')
+@pytest.mark.usefixtures("setup_and_teardown")
 @allure.suite("Interactions Page")
 class TestInteractionsPage:
     @allure.feature("Sortable")

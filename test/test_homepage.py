@@ -3,7 +3,7 @@ import allure
 from pom.homepage import Homepage
 
 
-@pytest.mark.usefixtures('setup')
+@pytest.mark.usefixtures("setup_and_teardown")
 @allure.suite("Homepage")
 class TestHomepage:
     @allure.feature("Homepage navigation")

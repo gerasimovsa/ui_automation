@@ -5,7 +5,7 @@ from pom.alerts_frame_windows_page import *
 from pom.elements_page import *
 
 
-@pytest.mark.usefixtures('setup')
+@pytest.mark.usefixtures("setup_and_teardown")
 @allure.suite("Alerts, Frame & Windows Page")
 class AlertsFrameWindowsPage:
     @allure.feature("Browser Windows")

@@ -3,7 +3,7 @@ import allure
 from pom.elements_page import *
 
 
-@pytest.mark.usefixtures('setup')
+@pytest.mark.usefixtures("setup_and_teardown")
 @allure.suite("Elements Page")
 class TestElementsPage:
     @allure.feature("Text Box")
